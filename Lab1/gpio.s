@@ -20,17 +20,6 @@ GPIO_PORTJ_AHB_DEN_R     	EQU    0x4006051C
 GPIO_PORTJ_AHB_PUR_R     	EQU    0x40060510	
 GPIO_PORTJ_AHB_DATA_R    	EQU    0x400603FC
 GPIO_PORTJ               	EQU    2_000000100000000
-; PORT B
-GPIO_PORTB_AHB_LOCK_R    	EQU    0x40059520
-GPIO_PORTB_AHB_CR_R      	EQU    0x40059524
-GPIO_PORTB_AHB_AMSEL_R   	EQU    0x40059528
-GPIO_PORTB_AHB_PCTL_R    	EQU    0x4005952C
-GPIO_PORTB_AHB_DIR_R     	EQU    0x40059400
-GPIO_PORTB_AHB_AFSEL_R   	EQU    0x40059420
-GPIO_PORTB_AHB_DEN_R     	EQU    0x4005951C
-GPIO_PORTB_AHB_PUR_R     	EQU    0x40059510	
-GPIO_PORTB_AHB_DATA_R    	EQU    0x400593FC
-GPIO_PORTB               	EQU    2_000000000000010	
 ; PORT A
 GPIO_PORTA_AHB_LOCK_R    	EQU    0x40058520
 GPIO_PORTA_AHB_CR_R      	EQU    0x40058524
@@ -42,6 +31,17 @@ GPIO_PORTA_AHB_DEN_R     	EQU    0x4005851C
 GPIO_PORTA_AHB_PUR_R     	EQU    0x40058510	
 GPIO_PORTA_AHB_DATA_R    	EQU    0x400583FC
 GPIO_PORTA               	EQU    2_000000000000001	
+; PORT B
+GPIO_PORTB_AHB_LOCK_R    	EQU    0x40059520
+GPIO_PORTB_AHB_CR_R      	EQU    0x40059524
+GPIO_PORTB_AHB_AMSEL_R   	EQU    0x40059528
+GPIO_PORTB_AHB_PCTL_R    	EQU    0x4005952C
+GPIO_PORTB_AHB_DIR_R     	EQU    0x40059400
+GPIO_PORTB_AHB_AFSEL_R   	EQU    0x40059420
+GPIO_PORTB_AHB_DEN_R     	EQU    0x4005951C
+GPIO_PORTB_AHB_PUR_R     	EQU    0x40059510	
+GPIO_PORTB_AHB_DATA_R    	EQU    0x400593FC
+GPIO_PORTB               	EQU    2_000000000000010	
 ; PORT Q
 GPIO_PORTQ_AHB_LOCK_R    	EQU    0x40066520
 GPIO_PORTQ_AHB_CR_R      	EQU    0x40066524
@@ -52,7 +52,7 @@ GPIO_PORTQ_AHB_AFSEL_R   	EQU    0x40066420
 GPIO_PORTQ_AHB_DEN_R     	EQU    0x4006651C
 GPIO_PORTQ_AHB_PUR_R     	EQU    0x40066510	
 GPIO_PORTQ_AHB_DATA_R    	EQU    0x400663FC
-GPIO_PORTQ               	EQU    2_010000000000000	
+GPIO_PORTQ               	EQU    2_100000000000000	
 ; PORT P
 GPIO_PORTP_AHB_LOCK_R    	EQU    0x40065520
 GPIO_PORTP_AHB_CR_R      	EQU    0x40065524
@@ -63,7 +63,7 @@ GPIO_PORTP_AHB_AFSEL_R   	EQU    0x40065420
 GPIO_PORTP_AHB_DEN_R     	EQU    0x4006551C
 GPIO_PORTP_AHB_PUR_R     	EQU    0x40065510	
 GPIO_PORTP_AHB_DATA_R    	EQU    0x400653FC
-GPIO_PORTP               	EQU    2_001000000000000	
+GPIO_PORTP               	EQU    2_010000000000000	
 
 
 ; -------------------------------------------------------------------------------
@@ -73,9 +73,12 @@ GPIO_PORTP               	EQU    2_001000000000000
 
 		; Se alguma função do arquivo for chamada em outro arquivo	
         EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
-		EXPORT PORTB_Output			; Permite chamar PortN_Output de outro arquivo
 		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
-									
+		EXPORT displayPortA
+		EXPORT displayPortQ
+		EXPORT displayLeft
+		EXPORT displayRight
+		EXPORT actLed
 
 ;--------------------------------------------------------------------------------
 ; Função GPIO_Init
@@ -189,33 +192,45 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
 ; Função PortF_Output
 ; Parâmetro de entrada: R0 --> se os BIT4 e BIT0 estão ligado ou desligado
 ; Parâmetro de saída: Não tem
-PortF_Output
-	
+displayPortA
 	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_11110000                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 11101110
 	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta A o barramento de dados dos pinos A4 e A7
-	
+	STR R0, [R1]                            ;Escreve na porta A o barramento de dados dos pinos A4 a A7
+	BX LR
+
+displayPortQ
 	LDR	R1, =GPIO_PORTQ_AHB_DATA_R		    ;Carrega o valor do offset do data register
-	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_00001111                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 11101110
 	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta Q o barramento de dados dos pinos Q4 e Q0
+	STR R0, [R1]                            ;Escreve na porta Q o barramento de dados dos pinos Q4 a Q0
+	BX LR
 	
+displayLeft
 	LDR	R1, =GPIO_PORTB_AHB_DATA_R
 	LDR R2, [R1]
-	BIC R2, #2_00110000                  
-	ORR R0, R0, R2                          
-	STR R0, [R1]
+	BIC R2, #2_00010000                  
+	ORR R3, R3, R2                          
+	STR R3, [R1]
+	BX LR
+
+displayRight
+	LDR	R1, =GPIO_PORTB_AHB_DATA_R
+	LDR R2, [R1]
+	BIC R2, #2_00100000                  
+	ORR R3, R3, R2                          
+	STR R3, [R1]
+	BX LR
 	
+actLed
 	LDR	R1, =GPIO_PORTP_AHB_DATA_R
 	LDR R2, [R1]
 	BIC R2, #2_00100000                  
-	ORR R0, R0, R2                          
-	STR R0, [R1]
+	ORR R4, R4, R2                          
+	STR R4, [R1]
 	
 	BX LR									;Retorno
 ; -------------------------------------------------------------------------------
