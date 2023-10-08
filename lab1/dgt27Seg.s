@@ -50,97 +50,96 @@ numbSelector
 	CMP R6, R0
 	BEQ NUMB9
 
+
 NUMB0
-	MOV R0, #2_00110000
-	BL displayPortA
-	MOV R0, #2_00001111
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_00111111
+	BL LoadNUMB
 	
 NUMB1
-	MOV R0, #2_00000000
-	BL displayPortA
-	MOV R0, #2_00000110
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_00000110
+	BL LoadNUMB
 	
 NUMB2
-	MOV R0, #2_01010000
-	BL displayPortA
-	MOV R0, #2_00001011
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_01011011
+	BL LoadNUMB
 
 NUMB3
-	MOV R0, #2_01000000
-	BL displayPortA
-	MOV R0, #2_00001111
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_01001111
+	BL LoadNUMB
 
 NUMB4
-	MOV R0, #2_01100000
-	BL displayPortA
-	MOV R0, #2_00000110
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_01100110
+	BL LoadNUMB
 
 NUMB5
-	MOV R0, #2_01100000
-	BL displayPortA
-	MOV R0, #2_00001101
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_01101101
+	BL LoadNUMB
 
 NUMB6
-	MOV R0, #2_01110000
-	BL displayPortA
-	MOV R0, #2_00001101
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_01111101
+	BL LoadNUMB
 
 NUMB7
-	MOV R0, #2_00000000
-	BL displayPortA
-	MOV R0, #2_00000111
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_00000111
+	BL LoadNUMB
 
 NUMB8
-	MOV R0, #2_01110000
-	BL displayPortA
-	MOV R0, #2_00001111
-	BL displayPortQ
-	BL NUMBOVER
+	MOV R3, #2_01111111
+	BL LoadNUMB
 
 NUMB9
-	MOV R0, #2_01100000
+	MOV R3, #2_01100111
+	BL LoadNUMB
+
+LoadNUMB
+	AND R0, R3, #2_11110000
 	BL displayPortA
-	MOV R0, #2_00000111
+	AND R0, R3, #2_00001111
 	BL displayPortQ
-	BL NUMBOVER
 	
-NUMBOVER
 	CMP R10, #0
-	BEQ verificaPrimo
+	BEQ	JustRight
+	
 	CMP R10, #1
-	BEQ displaying
+	BEQ verificaPrimo
+	
+	CMP R10, #2
+	BEQ JustLeft
+	
 	ADD R5, R12
 	CMP R5, #100
 	BGE restarting
 	B MainLoop
 
-
-displaying
-	MOV R0, #1000
+JustRight
+	MOV R4, #2_00000000
+	BL actLed
+	MOV R3, #2_00000000
+	BL displayLeft
+	MOV R3, #2_00100000
+	BL displayRight
+	
+	MOV R0, #0100
 	BL SysTick_Wait1ms
+	
+	ADD R10, #1
+	BL LoadNUMB
+
+JustLeft
 	MOV R4, #2_00000000
 	BL actLed
 	MOV R3, #2_00000000
 	BL displayRight
 	MOV R3, #2_00010000
 	BL displayLeft
+	
+	MOV R0, #0100
+	BL SysTick_Wait1ms
+	
 	ADD R10, #1
+	BL LoadNUMB
+
+displaying
 	MOV R6, R7
 	BL numbSelector
 
@@ -151,5 +150,5 @@ restarting
 	MOV R5, R6
 	B ResetPrimeList
 	
-    ALIGN                           ; garante que o fim da seÁ„o est· alinhada 
+    ALIGN                           ; garante que o fim da se√ß√£o est√° alinhada 
     END                             ; fim do arquivo

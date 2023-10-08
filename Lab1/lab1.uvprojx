@@ -390,9 +390,9 @@
               <FilePath>.\gpio.s</FilePath>
             </File>
             <File>
-              <FileName>main.s</FileName>
+              <FileName>utils.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\main.s</FilePath>
+              <FilePath>.\utils.s</FilePath>
             </File>
             <File>
               <FileName>startup.s</FileName>
@@ -400,14 +400,14 @@
               <FilePath>.\startup.s</FilePath>
             </File>
             <File>
-              <FileName>utils.s</FileName>
+              <FileName>dgt27Seg.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\utils.s</FilePath>
+              <FilePath>.\dgt27Seg.s</FilePath>
             </File>
             <File>
-              <FileName>numbers.s</FileName>
+              <FileName>countWprime.S</FileName>
               <FileType>2</FileType>
-              <FilePath>.\numbers.s</FilePath>
+              <FilePath>.\countWprime.S</FilePath>
             </File>
           </Files>
         </Group>
