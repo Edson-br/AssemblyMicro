@@ -97,7 +97,7 @@ baseCase
 	MOV R6, R5							;move o count p/ o "registrador de exibição" somente quando coun<10
 	
 nextStage
-	CMP R6, #9							
+	CMP R6, #9							;nao bugar as dezenas 
 	ADDEQ R7, #1						;r6 == 9, R7 +=1 (feita para "corrigir" o número q será exibido)
 	BL numbSelector						;vai para numbSelector (dgt27Seg.s)
 	
@@ -141,18 +141,22 @@ registPar
 registImpar
 	MUL R9, R1
 
+
+; Função displayingLED
+; Parâmetro de entrada: R4 -->  Transistor dos LED | R3 --> Transistor dos displays | R9 --> situacao dos leds
+; Parâmetro de saída: R10 --> Contador do mutiplexador dos displays | R0 --> Tempo espera
 displayingLED
-	MOV R3, #2_00000000
+	MOV R3, #2_00000000			;Zera R3(porta do display direito)
 	BL displayRight
-	MOV R3, #2_00000000
+	MOV R3, #2_00000000			;Zera R3(porta do display esquerdo)
 	BL displayLeft
-	MOV R0, R9
-	AND R0, #2_11110000
-	BL displayPortA
-	MOV R0, R9
-	AND R0, #2_00001111
-	BL displayPortQ
-	MOV R4, #2_00100000
+	MOV R0, R9					;R0 recebe R9 
+	AND R0, #2_11110000			;Primeiro limpamos os bits lidos da porta R0 = R0 & 00001111
+	BL displayPortA				;chama displayPortA
+	MOV R0, R9					;R0 recebe R9
+	AND R0, #2_00001111			;Primeiro limpamos os bits lidos da porta R0 = R0 & 11110000
+	BL displayPortQ				;chama displayPortQ
+	MOV R4, #2_00100000			;ativa R4(porta do led)
 	BL actLed
 	
 	MOV R0, #0100
@@ -161,13 +165,6 @@ displayingLED
 	MOV R10, #2
 	BL displaying
 	
-
-	
-	
-;--------------------------------------------------------------------------------
-; Função Pisca_LED
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: Não tem
 	NOP
 
 
