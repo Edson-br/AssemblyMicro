@@ -1,6 +1,0 @@
---target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -masm=auto  -Wa,armasm,--diag_suppress=A1950W -c
--gdwarf-4 -D__EVAL
--IC:/Users/fabio/AppData/Local/Arm/Packs/Keil/TM4C_DFP/1.1.0/Device/Include/TM4C129
--IC:/Keil_v5/ARM/CMSIS/Include
--D__UVISION_VERSION=538 -DTM4C1294NCPDT
--o ./objects/countwprime.o "countWprime.S"

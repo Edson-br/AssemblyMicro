@@ -44,10 +44,10 @@ Image Symbol Table
     $v0                                      0x000003d0   Number         0  utils.o(.text)
     .text                                    0x000003d0   Section      464  utils.o(.text)
     $v0                                      0x000005a0   Number         0  dgt27seg.o(.text)
-    .text                                    0x000005a0   Section      312  dgt27seg.o(.text)
-    $v0                                      0x000006d8   Number         0  countwprime.o(.text)
-    .text                                    0x000006d8   Section      276  countwprime.o(.text)
-    ListPrimos                               0x000007cc   Data          25  countwprime.o(.text)
+    .text                                    0x000005a0   Section      316  dgt27seg.o(.text)
+    $v0                                      0x000006dc   Number         0  countwprime.o(.text)
+    .text                                    0x000006dc   Section      268  countwprime.o(.text)
+    ListPrimos                               0x000007ca   Data          25  countwprime.o(.text)
     StackMem                                 0x20000000   Data           0  startup.o(STACK)
     STACK                                    0x20000000   Section     1024  startup.o(STACK)
 
@@ -176,11 +176,12 @@ Image Symbol Table
     SysTick_Init                             0x000004f9   Thumb Code     0  utils.o(.text)
     SysTick_Wait1ms                          0x00000533   Thumb Code     0  utils.o(.text)
     numbSelector                             0x000005a1   Thumb Code     0  dgt27seg.o(.text)
-    displaying                               0x000006bf   Thumb Code     0  dgt27seg.o(.text)
-    Start                                    0x000006d9   Thumb Code     0  countwprime.o(.text)
+    displayingLeft                           0x000006c7   Thumb Code     0  dgt27seg.o(.text)
+    Start                                    0x000006dd   Thumb Code     0  countwprime.o(.text)
     ResetPrimeList                           0x000006f9   Thumb Code     0  countwprime.o(.text)
     MainLoop                                 0x000006fd   Thumb Code     0  countwprime.o(.text)
-    verificaPrimo                            0x00000745   Thumb Code     0  countwprime.o(.text)
+    resetRegister                            0x00000721   Thumb Code     0  countwprime.o(.text)
+    verificaPrimo                            0x00000739   Thumb Code     0  countwprime.o(.text)
 
 
 
@@ -190,25 +191,25 @@ Memory Map of the image
 
   Image Entry point : 0x00000209
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x000007ec, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x000007e8, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x000007ec, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x000007e8, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000000   0x00000220   Code   RO           11  * RESET               startup.o
     0x00000220   0x00000220   0x000001b0   Code   RO            1    .text               gpio.o
     0x000003d0   0x000003d0   0x000001d0   Code   RO            6    .text               utils.o
-    0x000005a0   0x000005a0   0x00000138   Code   RO           18    .text               dgt27seg.o
-    0x000006d8   0x000006d8   0x00000114   Code   RO           22    .text               countwprime.o
+    0x000005a0   0x000005a0   0x0000013c   Code   RO           18    .text               dgt27seg.o
+    0x000006dc   0x000006dc   0x0000010c   Code   RO           22    .text               countwprime.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x000007ec, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x000007e8, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
 
-    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x000007ec, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x000007e8, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -222,14 +223,14 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       276         32          0          0          0        268   countwprime.o
-       312          2          0          0          0        276   dgt27seg.o
+       268         30          0          0          0        268   countwprime.o
+       316          0          0          0          0        296   dgt27seg.o
        432        132          0          0          0        332   gpio.o
        544        520          0          0       1024        720   startup.o
        464         92          0          0          0        332   utils.o
 
     ----------------------------------------------------------------------
-      2028        778          0          0       1024       1928   Object Totals
+      2024        774          0          0       1024       1948   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          0          0          0   (incl. Padding)
 
@@ -244,15 +245,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      2028        778          0          0       1024       1928   Grand Totals
-      2028        778          0          0       1024       1928   ELF Image Totals
-      2028        778          0          0          0          0   ROM Totals
+      2024        774          0          0       1024       1948   Grand Totals
+      2024        774          0          0       1024       1948   ELF Image Totals
+      2024        774          0          0          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 2028 (   1.98kB)
+    Total RO  Size (Code + RO Data)                 2024 (   1.98kB)
     Total RW  Size (RW Data + ZI Data)              1024 (   1.00kB)
-    Total ROM Size (Code + RO Data + RW Data)       2028 (   1.98kB)
+    Total ROM Size (Code + RO Data + RW Data)       2024 (   1.98kB)
 
 ==============================================================================
 
