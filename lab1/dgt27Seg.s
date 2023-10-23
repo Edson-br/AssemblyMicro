@@ -3,109 +3,53 @@
     AREA    |.text|, CODE, READONLY, ALIGN=2
 	THUMB
 
-	IMPORT 	MainLoop
-	IMPORT 	displayPortA
-	IMPORT 	displayPortQ
-	IMPORT 	displayLeft
-	IMPORT 	displayRight
-	IMPORT 	verificaPrimo
-	IMPORT  SysTick_Wait1ms	
-	IMPORT 	actLed
-	IMPORT	ResetPrimeList
-	IMPORT 	resetRegister
 	EXPORT	numbSelector
-	EXPORT 	displayingLeft
-		
+	EXPORT	LoadNUMB
 
-constTime	EQU		0050;
+	IMPORT	SysTick_Wait1ms
+	IMPORT	actLed
+	IMPORT	displayLeft
+	IMPORT	displayRight
+	IMPORT	displayPortA
+	IMPORT	displayPortQ
+	IMPORT	verificaPrimo
+	IMPORT 	MainLoop
+
+constTime	EQU		40;
 ; -------------------------------------------------------------------------------
 ; Função numbSelector
 ; Parâmetro de entrada: R6 --> Numero a ser impresso
 ; Parâmetro de saída: nao tem
 numbSelector
+	LDR R1, =ListDisplayPattern
 	MOV R0, #0				;zera o R0 para fazer utliza-lo como contador
+
+AGAIN
+	CMP R0, R3
 	
-	CMP R3, R0				;compara o R3 com o contador R0
-	BEQ NUMB0				;caso R6==#0-R0 vai para funcao numb0
-	ADD R0, #1				;c.c R0 += 1
-	CMP R3, R0
-	BEQ NUMB1
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB2
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB3
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB4
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB5
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB6
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB7
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB8
-	ADD R0, #1
-	CMP R3, R0
-	BEQ NUMB9
-
-; -------------------------------------------------------------------------------
-; Função numb* [0-9]
-; Parâmetro de entrada: Nao tem
-; Parâmetro de saída: R3 --> Bits do display de sete seg
-NUMB0
-	MOV R3, #2_00111111						;seta o R3 com os valores do display de sete segmentos 
-											;a fim de formar o numero 0
-	B 	LoadNUMB							;chama a funcao de carregar o numero
-	
-NUMB1
-	MOV R3, #2_00000110
-	B 	LoadNUMB
-	
-NUMB2
-	MOV R3, #2_01011011
-	B 	LoadNUMB
-
-NUMB3
-	MOV R3, #2_01001111
-	B 	LoadNUMB
-
-NUMB4
-	MOV R3, #2_01100110
-	B	LoadNUMB
-
-NUMB5
-	MOV R3, #2_01101101
-	B 	LoadNUMB
-
-NUMB6
-	MOV R3, #2_01111101
-	B 	LoadNUMB
-
-NUMB7
-	MOV R3, #2_00000111
-	B 	LoadNUMB
-
-NUMB8
-	MOV R3, #2_01111111
-	B 	LoadNUMB
-
-NUMB9
-	MOV R3, #2_01100111
-	B	LoadNUMB
-
+	ITEET LO
+	ADDLO 	R0, #1
+	ADDHS 	R1, R0
+	LDRBHS 	R3, [R1]
+	BLO		AGAIN	
 
 ; -------------------------------------------------------------------------------
 ; Função LoadNUMB
 ; Parâmetro de entrada: R3 --> Valor dos sete seg | R10 --> Contador do mutiplexador dos displays
 ; Parâmetro de saída: Nao tem 
 LoadNUMB
+	MOV 	R0, #0005
+	BL		SysTick_Wait1ms					;Espera 5ms
+	MOV R0, #2_00000000					;Desativa o conjunto de LEDs
+	BL 	actLed
+	MOV R0, #2_00000000					;Desativa o display da esquerda
+	BL 	displayLeft
+	MOV R0, #2_00000000					;Desativa o display da direita
+	BL 	displayRight	
+	
+	CMP R10, #3
+	MOVEQ R3, R9
+	
 	AND R0, R3, #2_11110000				;Seleciona a primeira parte do display a fim de usar a porta A4-A7
 										;R0 <-- R3 & 11110000
 	BL displayPortA						;Chama a funcao displayPortA (GPIO)
@@ -113,14 +57,30 @@ LoadNUMB
 										;R0 <-- R3 & 00001111
 	BL displayPortQ						;Chama a funcao displayPortQ (GPIO)
 	
-	CMP R10, #0
-	BEQ	JustRight						;R10 == 0 chama a funcao do display Direito
-	
 	CMP R10, #1
-	BEQ verificaPrimo					;R10 == 1 chama a funcao do verifica primo(Leds)
-	
+	ADD R10, #1
+;(FLAGnumb 0)STEP 0, ACTIVATE AND DEACTIVATE DISPLAYRIGHT
+	ITT   	LO
+	MOVLO	R0, #2_00100000					;Ativa o display da direita
+	BLLO	displayRight
+
+;(FLAGnumb 1)STEP 1, SET THE RIGHT DATE FOR THE DISPLAYLEFT
+	CMP R10, #1
+	MOVEQ	R10, #1							;para corrigir flagNumb
+	MOVEQ 	R3, R7							;prepara o algarismo das dezenas 
+	BEQ		numbSelector					;vai para numbSelector	
+
+;(FLAGnumb 2)STEP 2, 
 	CMP R10, #2
-	BEQ JustLeft						;R10 == 2 chama a funcao do display Esquerdo
+	ITT		EQ
+	MOVEQ	R0, #2_00010000					;Ativa o display da esquerda
+	BLEQ 	displayLeft
+;(FLAGnumb 3)STEP 3, VERIFY PRIME NUMBER
+	BEQ		verificaPrimo
+;(FLAGnumb 4)STEP 4, ACTIVATE LED
+	CMP	R10, #4
+	MOVEQ R0, #2_00100000					;Desativa o conjunto de LEDs
+	BLEQ 	actLed
 	
 	ADD R6, #1							;R6 += 1 (cronometro universal, quando r6 completa seu ciclo o sistema adiciona 1 ao numb exibido nos displays)
 	CMP R6, #constTime					;compara R6 com a constante de tempo
@@ -128,64 +88,16 @@ LoadNUMB
 	MOVEQ R6, #0						;prepara R6 para o próximo ciclo
 	
 	CMP R5, #100						;verifica se R5 == 100
-	BGE restarting						;se sim, vai para a label restarting
+	ITT		GE
+	MOVGE 	R10, #100					
+	UDIVGE 	R7, R5, R10
+	ITT		GE
+	MLSGE	R3, R10, R7, R5
+	MOVGE 	R5, R3
 	
-	CMP R6, #0							;verifica se R6 == 0 (se está preparado para o próx ciclo)
-	BEQ MainLoop						;se sim vai para MainLoop (countWprime.S)
-	
-	B 	resetRegister					;vai para a label resetRegister (countWprime.S)
+	B 	MainLoop						;vai para a label MainLoop (countWprime.S)
 
-;-------------------------------------------------------------------------------
-; Função JustRight-JustLeft
-; Parâmetro de entrada: R0 --> placeholder p/ estado desejado dos componentes
-; Parâmetro de saída: R10 --> Contador do mutiplexador dos displays
-JustRight
-	MOV R0, #2_00000000					;Desativa o conjunto de LEDs
-	BL 	actLed
-	MOV R0, #2_00000000					;Desativa o display da esquerda
-	BL 	displayLeft
-	MOV R0, #2_00100000					;Ativa o display da direita
-	BL 	displayRight
-	
-	MOV R0, #0005
-	BL 	SysTick_Wait1ms					;Espera 5ms
-	
-	MOV R3, #2_00000000					;Desativa o display da direita
-	BL 	displayRight	
-	
-	ADD R10, #1							;R10 + = 1 | adiciona um ao contador de multiplexador
-	B	LoadNUMB
 
-JustLeft
-	MOV R0, #2_00000000					;Desativa o conjunto de LEDs
-	BL 	actLed
-	MOV R0, #2_00000000					;Desativa o display da direita
-	BL 	displayRight
-	MOV R0, #2_00010000					;Ativa o display da esquerda
-	BL 	displayLeft
-	
-	MOV R0, #0005
-	BL 	SysTick_Wait1ms					;Espera 5ms
-
-	MOV R0, #2_00000000					;Desativa o display da esquerda
-	BL 	displayLeft
-	
-	ADD R10, #1							;R10 + = 1 | adiciona um ao contador de multiplexador
-	B	LoadNUMB
-
-displayingLeft
-	MOV R3, R7							;prepara o algarismo das dezenas 
-	B	numbSelector					;vai para numbSelector	
-
-;-------------------------------------------------------------------------------
-;Função restarting
-;Usado para garantir que R5 sempre recebe um numb entre 0 e 99, incluindo ambos os extremos
-restarting
-	MOV 	R10, #100					
-	UDIV 	R7, R5, R10
-	MLS		R3, R10, R7, R5
-	MOV 	R5, R3
-	B 		ResetPrimeList				;(countWprime.S)
-	
+ListDisplayPattern DCB 2_00111111, 2_00000110, 2_01011011, 2_01001111, 2_01100110, 2_01101101, 2_01111101, 2_00000111, 2_01111111, 2_01100111
     ALIGN                           ; garante que o fim da seção está alinhada 
     END                             ; fim do arquivo

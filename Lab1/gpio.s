@@ -10,62 +10,75 @@ SYSCTL_PRGPIO_R		 EQU    0x400FEA08
 ; ========================
 ; Definições dos Ports
 ; PORT J
-GPIO_PORTJ_AHB_LOCK_R    	EQU    0x40060520
-GPIO_PORTJ_AHB_CR_R      	EQU    0x40060524
-GPIO_PORTJ_AHB_AMSEL_R   	EQU    0x40060528
-GPIO_PORTJ_AHB_PCTL_R    	EQU    0x4006052C
-GPIO_PORTJ_AHB_DIR_R     	EQU    0x40060400
-GPIO_PORTJ_AHB_AFSEL_R   	EQU    0x40060420
-GPIO_PORTJ_AHB_DEN_R     	EQU    0x4006051C
-GPIO_PORTJ_AHB_PUR_R     	EQU    0x40060510	
-GPIO_PORTJ_AHB_DATA_R    	EQU    0x400603FC
-GPIO_PORTJ               	EQU    2_000000100000000
+GPIO_PORTJ_AHB_LOCK_R    	EQU    	0x40060520
+GPIO_PORTJ_AHB_CR_R      	EQU    	0x40060524
+GPIO_PORTJ_AHB_AMSEL_R   	EQU    	0x40060528
+GPIO_PORTJ_AHB_PCTL_R    	EQU    	0x4006052C
+GPIO_PORTJ_AHB_DIR_R     	EQU    	0x40060400
+GPIO_PORTJ_AHB_AFSEL_R   	EQU    	0x40060420
+GPIO_PORTJ_AHB_DEN_R     	EQU    	0x4006051C
+GPIO_PORTJ_AHB_PUR_R     	EQU    	0x40060510	
+GPIO_PORTJ_AHB_DATA_R    	EQU    	0x400603FC
+GPIO_PORTJ               	EQU    	2_000000100000000
+	
+GPIO_PORTJ_AHB_IS_R 		EQU		0x40060404
+GPIO_PORTJ_AHB_IBE_R 		EQU		0x40060408
+GPIO_PORTJ_AHB_IEV_R		EQU		0x4006040C
+GPIO_PORTJ_AHB_ICR_R 		EQU		0x4006041C
+GPIO_PORTJ_AHB_IM_R			EQU	   	0x40060410
+
+GPIO_PORTJ_AHB_RIS_R		EQU		0x40060414
+GPIO_PORTJ_AHB_MIS_R    	EQU		0x40060418
+
 ; PORT A
-GPIO_PORTA_AHB_LOCK_R    	EQU    0x40058520
-GPIO_PORTA_AHB_CR_R      	EQU    0x40058524
-GPIO_PORTA_AHB_AMSEL_R   	EQU    0x40058528
-GPIO_PORTA_AHB_PCTL_R    	EQU    0x4005852C
-GPIO_PORTA_AHB_DIR_R     	EQU    0x40058400
-GPIO_PORTA_AHB_AFSEL_R   	EQU    0x40058420
-GPIO_PORTA_AHB_DEN_R     	EQU    0x4005851C
-GPIO_PORTA_AHB_PUR_R     	EQU    0x40058510	
-GPIO_PORTA_AHB_DATA_R    	EQU    0x400583FC
-GPIO_PORTA               	EQU    2_000000000000001	
+GPIO_PORTA_AHB_LOCK_R    	EQU    	0x40058520
+GPIO_PORTA_AHB_CR_R      	EQU    	0x40058524
+GPIO_PORTA_AHB_AMSEL_R   	EQU    	0x40058528
+GPIO_PORTA_AHB_PCTL_R    	EQU    	0x4005852C
+GPIO_PORTA_AHB_DIR_R     	EQU    	0x40058400
+GPIO_PORTA_AHB_AFSEL_R   	EQU    	0x40058420
+GPIO_PORTA_AHB_DEN_R     	EQU    	0x4005851C
+GPIO_PORTA_AHB_PUR_R     	EQU    	0x40058510	
+GPIO_PORTA_AHB_DATA_R    	EQU    	0x400583FC
+GPIO_PORTA               	EQU    	2_000000000000001	
 ; PORT B
-GPIO_PORTB_AHB_LOCK_R    	EQU    0x40059520
-GPIO_PORTB_AHB_CR_R      	EQU    0x40059524
-GPIO_PORTB_AHB_AMSEL_R   	EQU    0x40059528
-GPIO_PORTB_AHB_PCTL_R    	EQU    0x4005952C
-GPIO_PORTB_AHB_DIR_R     	EQU    0x40059400
-GPIO_PORTB_AHB_AFSEL_R   	EQU    0x40059420
-GPIO_PORTB_AHB_DEN_R     	EQU    0x4005951C
-GPIO_PORTB_AHB_PUR_R     	EQU    0x40059510	
-GPIO_PORTB_AHB_DATA_R    	EQU    0x400593FC
-GPIO_PORTB               	EQU    2_000000000000010	
+GPIO_PORTB_AHB_LOCK_R    	EQU    	0x40059520
+GPIO_PORTB_AHB_CR_R      	EQU    	0x40059524
+GPIO_PORTB_AHB_AMSEL_R   	EQU    	0x40059528
+GPIO_PORTB_AHB_PCTL_R    	EQU    	0x4005952C
+GPIO_PORTB_AHB_DIR_R     	EQU    	0x40059400
+GPIO_PORTB_AHB_AFSEL_R   	EQU    	0x40059420
+GPIO_PORTB_AHB_DEN_R     	EQU    	0x4005951C
+GPIO_PORTB_AHB_PUR_R     	EQU    	0x40059510	
+GPIO_PORTB_AHB_DATA_R    	EQU    	0x400593FC
+GPIO_PORTB               	EQU    	2_000000000000010	
 ; PORT Q
-GPIO_PORTQ_AHB_LOCK_R    	EQU    0x40066520
-GPIO_PORTQ_AHB_CR_R      	EQU    0x40066524
-GPIO_PORTQ_AHB_AMSEL_R   	EQU    0x40066528
-GPIO_PORTQ_AHB_PCTL_R    	EQU    0x4006652C
-GPIO_PORTQ_AHB_DIR_R     	EQU    0x40066400
-GPIO_PORTQ_AHB_AFSEL_R   	EQU    0x40066420
-GPIO_PORTQ_AHB_DEN_R     	EQU    0x4006651C
-GPIO_PORTQ_AHB_PUR_R     	EQU    0x40066510	
-GPIO_PORTQ_AHB_DATA_R    	EQU    0x400663FC
-GPIO_PORTQ               	EQU    2_100000000000000	
+GPIO_PORTQ_AHB_LOCK_R    	EQU    	0x40066520
+GPIO_PORTQ_AHB_CR_R      	EQU    	0x40066524
+GPIO_PORTQ_AHB_AMSEL_R   	EQU    	0x40066528
+GPIO_PORTQ_AHB_PCTL_R    	EQU    	0x4006652C
+GPIO_PORTQ_AHB_DIR_R     	EQU    	0x40066400
+GPIO_PORTQ_AHB_AFSEL_R   	EQU    	0x40066420
+GPIO_PORTQ_AHB_DEN_R     	EQU    	0x4006651C
+GPIO_PORTQ_AHB_PUR_R     	EQU    	0x40066510	
+GPIO_PORTQ_AHB_DATA_R    	EQU    	0x400663FC
+GPIO_PORTQ               	EQU    	2_100000000000000	
 ; PORT P
-GPIO_PORTP_AHB_LOCK_R    	EQU    0x40065520
-GPIO_PORTP_AHB_CR_R      	EQU    0x40065524
-GPIO_PORTP_AHB_AMSEL_R   	EQU    0x40065528
-GPIO_PORTP_AHB_PCTL_R    	EQU    0x4006552C
-GPIO_PORTP_AHB_DIR_R     	EQU    0x40065400
-GPIO_PORTP_AHB_AFSEL_R   	EQU    0x40065420
-GPIO_PORTP_AHB_DEN_R     	EQU    0x4006551C
-GPIO_PORTP_AHB_PUR_R     	EQU    0x40065510	
-GPIO_PORTP_AHB_DATA_R    	EQU    0x400653FC
-GPIO_PORTP               	EQU    2_010000000000000	
+GPIO_PORTP_AHB_LOCK_R    	EQU    	0x40065520
+GPIO_PORTP_AHB_CR_R      	EQU    	0x40065524
+GPIO_PORTP_AHB_AMSEL_R   	EQU    	0x40065528
+GPIO_PORTP_AHB_PCTL_R    	EQU    	0x4006552C
+GPIO_PORTP_AHB_DIR_R     	EQU    	0x40065400
+GPIO_PORTP_AHB_AFSEL_R   	EQU    	0x40065420
+GPIO_PORTP_AHB_DEN_R     	EQU    	0x4006551C
+GPIO_PORTP_AHB_PUR_R     	EQU    	0x40065510	
+GPIO_PORTP_AHB_DATA_R    	EQU    	0x400653FC
+GPIO_PORTP               	EQU    	2_010000000000000	
 
 
+;NVIC registers
+NVIC_EN1_R					EQU		0xE000E104
+NVIC_PRI12_R 				EQU		0xE000E430
 ; -------------------------------------------------------------------------------
 ; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
 ;                  código
@@ -73,12 +86,13 @@ GPIO_PORTP               	EQU    2_010000000000000
 
 		; Se alguma função do arquivo for chamada em outro arquivo	
         EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
-		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
+;		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
 		EXPORT displayPortA
 		EXPORT displayPortQ
 		EXPORT displayLeft
 		EXPORT displayRight
 		EXPORT actLed
+		EXPORT GPIOPortJ_Handler
 
 ;--------------------------------------------------------------------------------
 ; Função GPIO_Init
@@ -186,6 +200,37 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
                                                         ;nos bits 0 e 1
             STR     R1, [R0]							;Escreve no registrador da memória do resistor de pull-up
             
+; 8. Habilitando interrupção na portaJ
+			LDR		R0, =GPIO_PORTJ_AHB_IM_R
+			MOV		R1, #2_00000000
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IS_R 
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IBE_R
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IEV_R
+			MOV		R1, #2_00000011
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_ICR_R
+			MOV		R1, #2_00000011
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IM_R
+			MOV		R1, #2_00000011
+			
+			LDR		R0, =NVIC_EN1_R
+			MOV		R1, #1
+			LSL		R1, #19
+			STR		R1, [R0]
+			
+			LDR		R0, =NVIC_PRI12_R
+			MOV		R1, #5
+			LSL		R1, #29
+			STR		R1, [R0]
 ;retorno            
 			BX      LR
 
@@ -237,11 +282,30 @@ actLed
 ; Função PortJ_Input
 ; Parâmetro de entrada: Não tem
 ; Parâmetro de saída: R0 --> o valor da leitura
-PortJ_Input
-	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
-	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
-	BX LR									;Retorno
+;PortJ_Input
+;	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
+;	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
+;	BX LR									;Retorno
+GPIOPortJ_Handler
+	LDR R1, =GPIO_PORTJ_AHB_RIS_R
+	LDR R0, [R1]
+	
+	CMP R0, #1
+	ADDEQ R12, #1
+	CMP R12, #10
+	MOVEQ R12, #9
+	
+	CMP R0, #2
+	SUBEQ R12, #1
+	CMP R12, #0
+	MOVEQ R12, #1
+	
+	
+	MOV	R1, #2_00000011
+	LDR R2, =GPIO_PORTJ_AHB_ICR_R
+	STR R1, [R2]
 
+	BX LR
 
 
     ALIGN                           ; garante que o fim da seção está alinhada 
