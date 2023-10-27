@@ -320,9 +320,8 @@ deslocaMSG							;Deslocam. Cursor/LCD
 
 moveCursor							;Deslocam. Cursor/LCD
 	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	MOV R0, #2_00010100				;com S/C setado para 0, fazendo com q seja ativada a operação q desloca o cursor
-	BIC R2, #2_11111100                     		
-	ORR R0, R0, R2 	
+	BIC R2, #2_11111100                   
+	ORR R0, R0, R2 					;entrada R0 == 0001ABxx; A == Display ou cursor, B == Direita ou esquerda
 	STR R0, [R1]
 	PUSH	{LR}
 	BL		enableLCD

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\lab02.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\lab02.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Wed Oct 25 23:00:22 2023
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Fri Oct 27 17:56:15 2023
 <BR><P>
 <H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -22,7 +22,7 @@ Functions with no stack information
  <LI><a href="#[72]">moveCursor</a>
  <LI><a href="#[73]">modoLCD</a>
  <LI><a href="#[74]">positionCursor</a>
- <LI><a href="#[7f]">escreverDadoLCD</a>
+ <LI><a href="#[86]">escreverDadoLCD</a>
  <LI><a href="#[75]">checkMxKey</a>
  <LI><a href="#[76]">PLL_Init</a>
  <LI><a href="#[77]">PLL_Init_step7slow</a>
@@ -31,13 +31,20 @@ Functions with no stack information
  <LI><a href="#[6b]">Start</a>
  <LI><a href="#[7c]">ruReadyScreen</a>
  <LI><a href="#[7d]">roundScreen</a>
+ <LI><a href="#[7f]">writeNumbScreen</a>
+ <LI><a href="#[84]">gameOverScreen</a>
  <LI><a href="#[7b]">pressedStart</a>
- <LI><a href="#[7e]">RoundNumberHEX</a>
+ <LI><a href="#[85]">preparaLED</a>
+ <LI><a href="#[7e]">RoundNumberHEXLCD</a>
+ <LI><a href="#[82]">whichKey</a>
+ <LI><a href="#[80]">decipherMxChar</a>
+ <LI><a href="#[83]">actionKey</a>
+ <LI><a href="#[81]">compareData</a>
  <LI><a href="#[7a]">GPIO_InitLED</a>
- <LI><a href="#[80]">LEDsequence</a>
- <LI><a href="#[82]">displayLeft</a>
- <LI><a href="#[83]">displayRight</a>
- <LI><a href="#[81]">actLed</a>
+ <LI><a href="#[87]">LEDsequence</a>
+ <LI><a href="#[8a]">displayLeft</a>
+ <LI><a href="#[89]">displayRight</a>
+ <LI><a href="#[88]">actLed</a>
  <LI><a href="#[3d]">GPIOPortJ_Handler</a>
 </UL>
 </UL>
@@ -557,6 +564,9 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;enableLCD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pressedStart
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareData
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ruReadyScreen
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
@@ -584,21 +594,22 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[74]"></a>positionCursor</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<P><STRONG><a name="[74]"></a>positionCursor</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;enableLCD
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
+<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
 </UL>
 
-<P><STRONG><a name="[7f]"></a>escreverDadoLCD</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RoundNumberHEX
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
+<P><STRONG><a name="[86]"></a>escreverDadoLCD</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;decipherMxChar
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RoundNumberHEXLCD
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
 </UL>
 
-<P><STRONG><a name="[75]"></a>checkMxKey</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<P><STRONG><a name="[75]"></a>checkMxKey</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
+<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
 </UL>
 
 <P><STRONG><a name="[76]"></a>PLL_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text))
@@ -616,11 +627,12 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[6d]"></a>SysTick_Wait1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayRight
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayLeft
-<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;actLed
-<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pressedStart
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayRight
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayLeft
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;actLed
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;preparaLED
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ruReadyScreen
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkMxKey
@@ -640,7 +652,8 @@ Global Symbols
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;limpaLCD
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 </UL>
-<BR>[Called By]<UL><LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
+<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
+<LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
 </UL>
 
 <P><STRONG><a name="[7c]"></a>ruReadyScreen</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, jogodamemoria.o(.text))
@@ -651,53 +664,116 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[7d]"></a>roundScreen</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, jogodamemoria.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RoundNumberHEX
-<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
-<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkMxKey
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;escreverDadoLCD
-<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;positionCursor
+<BR><BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RoundNumberHEXLCD
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;limpaLCD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pressedStart
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareData
+</UL>
+
+<P><STRONG><a name="[7f]"></a>writeNumbScreen</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, jogodamemoria.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;whichKey
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;decipherMxChar
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareData
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;actionKey
+<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;limpaLCD
+</UL>
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareData
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;actionKey
+</UL>
+
+<P><STRONG><a name="[84]"></a>gameOverScreen</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, jogodamemoria.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;preparaLED
+<LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;checkMxKey
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;escreverDadoLCD
+<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;positionCursor
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;limpaLCD
+</UL>
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareData
 </UL>
 
 <P><STRONG><a name="[7b]"></a>pressedStart</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;actLed
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LEDsequence
+<BR><BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;preparaLED
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ruReadyScreen
-<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
 <LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;limpaLCD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[7e]"></a>RoundNumberHEX</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;escreverDadoLCD
+<P><STRONG><a name="[85]"></a>preparaLED</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;actLed
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LEDsequence
+<LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pressedStart
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareData
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
+</UL>
+
+<P><STRONG><a name="[7e]"></a>RoundNumberHEXLCD</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayRight
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;displayLeft
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;escreverDadoLCD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
+</UL>
+
+<P><STRONG><a name="[82]"></a>whichKey</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text), UNUSED)
+<BR><BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
+</UL>
+
+<P><STRONG><a name="[80]"></a>decipherMxChar</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;escreverDadoLCD
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
+</UL>
+
+<P><STRONG><a name="[83]"></a>actionKey</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
+</UL>
+
+<P><STRONG><a name="[81]"></a>compareData</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, inputdata.o(.text), UNUSED)
+<BR><BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LEDsequence
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;preparaLED
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gameOverScreen
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;roundScreen
+<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;limpaLCD
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;writeNumbScreen
 </UL>
 
 <P><STRONG><a name="[7a]"></a>GPIO_InitLED</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[80]"></a>LEDsequence</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pressedStart
+<P><STRONG><a name="[87]"></a>LEDsequence</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;preparaLED
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;compareData
 </UL>
 
-<P><STRONG><a name="[82]"></a>displayLeft</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text), UNUSED)
+<P><STRONG><a name="[8a]"></a>displayLeft</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RoundNumberHEXLCD
 </UL>
 
-<P><STRONG><a name="[83]"></a>displayRight</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text), UNUSED)
+<P><STRONG><a name="[89]"></a>displayRight</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RoundNumberHEXLCD
 </UL>
 
-<P><STRONG><a name="[81]"></a>actLed</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))
+<P><STRONG><a name="[88]"></a>actLed</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pressedStart
+<BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;preparaLED
 </UL>
 
 <P><STRONG><a name="[3d]"></a>GPIOPortJ_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpioled.o(.text))

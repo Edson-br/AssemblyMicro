@@ -30,7 +30,9 @@
 			                        ; outro arquivo. No caso startup.s
 		EXPORT	ruReadyScreen
 		EXPORT	roundScreen
-									
+		EXPORT	writeNumbScreen
+		EXPORT	gameOverScreen
+			
 		IMPORT  PLL_Init
 		IMPORT  SysTick_Init				
 		IMPORT  GPIO_Init
@@ -45,10 +47,16 @@
 		IMPORT  moveCursor
 		IMPORT	resetCursorPosition
 		; Dados referenes a exibição
-		IMPORT	RoundNumberHEX
+		IMPORT	RoundNumberHEXLCD
+		IMPORT	preparaLED
 		; Operações referentes ao teclado matricial
 		IMPORT 	checkMxKey
 		IMPORT 	pressedStart
+		; Interação	
+		IMPORT	whichKey
+		IMPORT	decipherMxChar
+		IMPORT	actionKey
+		IMPORT	compareData
 ; -------------------------------------------------------------------------------
 ; Função main()
 Start
@@ -98,19 +106,65 @@ roundScreen
 	MOV 	R10, #6
 	MOV		R11, #6
 	BL		loopHEXLCD
-	BL		RoundNumberHEX
+	BL		RoundNumberHEXLCD
 	
 writeNumbScreen
-	MOV 	R0, #2000
-	BL		SysTick_Wait1ms					;Espera 2s
+	MOV 	R0, #250
+	BL		SysTick_Wait1ms					
 	BL		limpaLCD
 	LDR	R4, =writeNumbHEX
 	MOV 	R10, #7
 	MOV		R11, #16
 	BL		loopHEXLCD
-	B		writeNumbScreen
-	
+escreveDezenas
+	BL		ALtoDetectPress
+	MOV		R7, R0
+	CMP		R7, #10
+	BGE		escreveDezenas
+	MOV		R10, #10
+	MUL		R7, R10
+	BL		decipherMxChar
+	MOV 	R0, #250
+	BL		SysTick_Wait1ms					
+escreveUnidades	
+	BL		ALtoDetectPress
+	CMP		R0, #10
+	BGE		escreveUnidades
+	ADD		R7, R0
+	BL		decipherMxChar
+	MOV 	R0, #150
+	BL		SysTick_Wait1ms					
+whichAction
+	BL		ALtoDetectPress
+	CMP		R0, #10
+	BLO		whichAction
+	B		compareData
 
+
+ALtoDetectPress
+	PUSH{LR}
+	BL		dtBtPress
+	BL		whichKey
+	CMP		R0, #10
+	IT		GE
+	BLGE	actionKey
+	POP{LR}
+	BX		LR
+	
+gameOverScreen
+	MOV 	R0, #250
+	BL		SysTick_Wait1ms					
+	BL		limpaLCD
+	LDR	R4, =gameOverHEX
+	MOV 	R10, #12
+	MOV		R11, #12
+	BL		loopHEXLCD
+	MOV 	R0, #2500
+	BL		SysTick_Wait1ms
+	BL		preparaLED
+	B		Start
+
+;loop para  inserir os caracteres (HEX das listas no final do .s) no LCD
 loopHEXLCD
 	MOV R12, #0
 	PUSH{LR}
@@ -129,14 +183,16 @@ loopWithoutLR
 	BLO		loopWithoutLR
 	POP{LR}
 	BX		LR
+
+
 ; -------------------------------------------------------------------------------
 ;Funções referentes a detecção dos inputs do teclado mx
 dtBtPress		;detect button press
 	LDR	R4, =matrixPsbility
 	MOV R12, #0
 	PUSH{LR}
-
-loopDtKey	
+	MOV	R3, #0
+loopDtKey
 	CMP R12, #3
 	ADD	R12, #1
 	ITT	EQ
@@ -148,9 +204,15 @@ loopDtKey
 	BL	checkMxKey
 	POP{R0}
 	
-	CMP	R2, #0xf0
-	BEQ	loopDtKey
+	CMP		R3, #99
+	ITE		HS
+	MOVHS	R3, #0
+	ADDLO	R3, #1
+	
+	CMP		R2, #0xf0
+	BEQ		loopDtKey
 	POP{LR}
+
 	BX	LR
 	
 	NOP
@@ -166,6 +228,8 @@ roundHEX		DCB		0x52, 0x6F, 0x75, 0x6E, 0x64, 0X20
 ;Round
 writeNumbHEX	DCB		0x44, 0x69, 0x67, 0x69, 0x74, 0x65, 0x20, 0x6F, 0X4E, 0X75, 0X6D, 0X65, 0X72, 0X6F, 0X3A
 ;Digite oNumero:
+gameOverHEX		DCB		0x20, 0x20, 0x47, 0x41, 0x4D, 0x45, 0x20, 0x4F, 0x56, 0x45, 0x52, 0x2E
+;    GAME OVER
 matrixPsbility	DCB		2_00001110, 2_00001101, 2_00001011, 2_00000111
 
 ; -------------------------------------------------------------------------------------------------------------------------
