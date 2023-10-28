@@ -5,10 +5,11 @@ Component: Arm Compiler for Embedded 6.19 Tool: armlink [5e73cb00]
 Section Cross References
 
     startup.o(RESET) refers to startup.o(STACK) for StackMem
+    startup.o(RESET) refers to gpio.o(.text) for GPIOPortJ_Handler
     startup.o(RESET) refers to countwprime.o(.text) for Start
-    dgt27seg.o(.text) refers to gpio.o(.text) for displayPortA
-    dgt27seg.o(.text) refers to countwprime.o(.text) for verificaPrimo
     dgt27seg.o(.text) refers to utils.o(.text) for SysTick_Wait1ms
+    dgt27seg.o(.text) refers to gpio.o(.text) for actLed
+    dgt27seg.o(.text) refers to countwprime.o(.text) for verificaPrimo
     countwprime.o(.text) refers to utils.o(.text) for PLL_Init
     countwprime.o(.text) refers to gpio.o(.text) for GPIO_Init
     countwprime.o(.text) refers to dgt27seg.o(.text) for numbSelector
@@ -40,14 +41,14 @@ Image Symbol Table
     RESET                                    0x00000000   Section      544  startup.o(RESET)
     $v0                                      0x00000208   Number         0  startup.o(RESET)
     $v0                                      0x00000220   Number         0  gpio.o(.text)
-    .text                                    0x00000220   Section      432  gpio.o(.text)
-    $v0                                      0x000003d0   Number         0  utils.o(.text)
-    .text                                    0x000003d0   Section      464  utils.o(.text)
-    $v0                                      0x000005a0   Number         0  dgt27seg.o(.text)
-    .text                                    0x000005a0   Section      316  dgt27seg.o(.text)
-    $v0                                      0x000006dc   Number         0  countwprime.o(.text)
-    .text                                    0x000006dc   Section      268  countwprime.o(.text)
-    ListPrimos                               0x000007ca   Data          25  countwprime.o(.text)
+    .text                                    0x00000220   Section      568  gpio.o(.text)
+    $v0                                      0x00000458   Number         0  utils.o(.text)
+    .text                                    0x00000458   Section      464  utils.o(.text)
+    $v0                                      0x00000628   Number         0  dgt27seg.o(.text)
+    .text                                    0x00000628   Section      184  dgt27seg.o(.text)
+    ListDisplayPattern                       0x000006d0   Data          10  dgt27seg.o(.text)
+    $v0                                      0x000006e0   Number         0  countwprime.o(.text)
+    .text                                    0x000006e0   Section      148  countwprime.o(.text)
     StackMem                                 0x20000000   Data           0  startup.o(STACK)
     STACK                                    0x20000000   Section     1024  startup.o(STACK)
 
@@ -92,7 +93,6 @@ Image Symbol Table
     GPIOPortF_Handler                        0x0000021f   Thumb Code     0  startup.o(RESET)
     GPIOPortG_Handler                        0x0000021f   Thumb Code     0  startup.o(RESET)
     GPIOPortH_Handler                        0x0000021f   Thumb Code     0  startup.o(RESET)
-    GPIOPortJ_Handler                        0x0000021f   Thumb Code     0  startup.o(RESET)
     GPIOPortK_Handler                        0x0000021f   Thumb Code     0  startup.o(RESET)
     GPIOPortL_Handler                        0x0000021f   Thumb Code     0  startup.o(RESET)
     GPIOPortM_Handler                        0x0000021f   Thumb Code     0  startup.o(RESET)
@@ -165,23 +165,21 @@ Image Symbol Table
     uDMA_Error                               0x0000021f   Thumb Code     0  startup.o(RESET)
     uDMA_Handler                             0x0000021f   Thumb Code     0  startup.o(RESET)
     GPIO_Init                                0x00000221   Thumb Code     0  gpio.o(.text)
-    displayPortA                             0x000002f7   Thumb Code     0  gpio.o(.text)
-    displayPortQ                             0x00000307   Thumb Code     0  gpio.o(.text)
-    displayLeft                              0x00000317   Thumb Code     0  gpio.o(.text)
-    displayRight                             0x00000327   Thumb Code     0  gpio.o(.text)
-    actLed                                   0x00000337   Thumb Code     0  gpio.o(.text)
-    PortJ_Input                              0x00000347   Thumb Code     0  gpio.o(.text)
-    PLL_Init                                 0x000003d1   Thumb Code     0  utils.o(.text)
-    PLL_Init_step7slow                       0x000004a3   Thumb Code     0  utils.o(.text)
-    SysTick_Init                             0x000004f9   Thumb Code     0  utils.o(.text)
-    SysTick_Wait1ms                          0x00000533   Thumb Code     0  utils.o(.text)
-    numbSelector                             0x000005a1   Thumb Code     0  dgt27seg.o(.text)
-    displayingLeft                           0x000006c7   Thumb Code     0  dgt27seg.o(.text)
-    Start                                    0x000006dd   Thumb Code     0  countwprime.o(.text)
-    ResetPrimeList                           0x000006f9   Thumb Code     0  countwprime.o(.text)
+    displayPortA                             0x00000335   Thumb Code     0  gpio.o(.text)
+    displayPortQ                             0x00000345   Thumb Code     0  gpio.o(.text)
+    displayLeft                              0x00000355   Thumb Code     0  gpio.o(.text)
+    displayRight                             0x00000365   Thumb Code     0  gpio.o(.text)
+    actLed                                   0x00000375   Thumb Code     0  gpio.o(.text)
+    GPIOPortJ_Handler                        0x00000385   Thumb Code     0  gpio.o(.text)
+    PLL_Init                                 0x00000459   Thumb Code     0  utils.o(.text)
+    PLL_Init_step7slow                       0x0000052b   Thumb Code     0  utils.o(.text)
+    SysTick_Init                             0x00000581   Thumb Code     0  utils.o(.text)
+    SysTick_Wait1ms                          0x000005bb   Thumb Code     0  utils.o(.text)
+    numbSelector                             0x00000629   Thumb Code     0  dgt27seg.o(.text)
+    LoadNUMB                                 0x0000063b   Thumb Code     0  dgt27seg.o(.text)
+    Start                                    0x000006e1   Thumb Code     0  countwprime.o(.text)
     MainLoop                                 0x000006fd   Thumb Code     0  countwprime.o(.text)
-    resetRegister                            0x00000721   Thumb Code     0  countwprime.o(.text)
-    verificaPrimo                            0x00000739   Thumb Code     0  countwprime.o(.text)
+    verificaPrimo                            0x00000717   Thumb Code     0  countwprime.o(.text)
 
 
 
@@ -191,25 +189,25 @@ Memory Map of the image
 
   Image Entry point : 0x00000209
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x000007e8, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000774, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x000007e8, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000774, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000000   0x00000220   Code   RO           11  * RESET               startup.o
-    0x00000220   0x00000220   0x000001b0   Code   RO            1    .text               gpio.o
-    0x000003d0   0x000003d0   0x000001d0   Code   RO            6    .text               utils.o
-    0x000005a0   0x000005a0   0x0000013c   Code   RO           18    .text               dgt27seg.o
-    0x000006dc   0x000006dc   0x0000010c   Code   RO           22    .text               countwprime.o
+    0x00000220   0x00000220   0x00000238   Code   RO            1    .text               gpio.o
+    0x00000458   0x00000458   0x000001d0   Code   RO            6    .text               utils.o
+    0x00000628   0x00000628   0x000000b8   Code   RO           18    .text               dgt27seg.o
+    0x000006e0   0x000006e0   0x00000094   Code   RO           22    .text               countwprime.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x000007e8, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000774, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
 
-    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x000007e8, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x00000774, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -223,14 +221,14 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       268         30          0          0          0        268   countwprime.o
-       316          0          0          0          0        296   dgt27seg.o
-       432        132          0          0          0        332   gpio.o
-       544        520          0          0       1024        720   startup.o
-       464         92          0          0          0        332   utils.o
+       148          0          0          0          0        260   countwprime.o
+       184         16          0          0          0        264   dgt27seg.o
+       568        162          0          0          0        388   gpio.o
+       544        520          0          0       1024        740   startup.o
+       464         92          0          0          0        356   utils.o
 
     ----------------------------------------------------------------------
-      2024        774          0          0       1024       1948   Object Totals
+      1908        790          0          0       1024       2008   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          0          0          0   (incl. Padding)
 
@@ -245,15 +243,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      2024        774          0          0       1024       1948   Grand Totals
-      2024        774          0          0       1024       1948   ELF Image Totals
-      2024        774          0          0          0          0   ROM Totals
+      1908        790          0          0       1024       2008   Grand Totals
+      1908        790          0          0       1024       2008   ELF Image Totals
+      1908        790          0          0          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 2024 (   1.98kB)
+    Total RO  Size (Code + RO Data)                 1908 (   1.86kB)
     Total RW  Size (RW Data + ZI Data)              1024 (   1.00kB)
-    Total ROM Size (Code + RO Data + RW Data)       2024 (   1.98kB)
+    Total ROM Size (Code + RO Data + RW Data)       1908 (   1.86kB)
 
 ==============================================================================
 
