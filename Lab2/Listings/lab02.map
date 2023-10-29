@@ -51,21 +51,25 @@ Image Symbol Table
     $v0                                      0x00000488   Number         0  utils.o(.text)
     .text                                    0x00000488   Section      464  utils.o(.text)
     $v0                                      0x00000658   Number         0  jogodamemoria.o(.text)
-    .text                                    0x00000658   Section      528  jogodamemoria.o(.text)
-    boasVindasHEX                            0x000007e2   Data          28  jogodamemoria.o(.text)
-    pressButtonHEX                           0x000007fe   Data          22  jogodamemoria.o(.text)
-    ruReadyHEX                               0x00000814   Data          14  jogodamemoria.o(.text)
-    roundHEX                                 0x00000822   Data           6  jogodamemoria.o(.text)
-    writeNumbHEX                             0x00000828   Data          15  jogodamemoria.o(.text)
-    gameOverHEX                              0x00000837   Data          12  jogodamemoria.o(.text)
-    matrixPsbility                           0x00000843   Data           4  jogodamemoria.o(.text)
-    $v0                                      0x00000868   Number         0  inputdata.o(.text)
-    .text                                    0x00000868   Section      528  inputdata.o(.text)
-    mxToChar                                 0x000009e4   Data          16  inputdata.o(.text)
-    randList                                 0x000009f4   Data         100  inputdata.o(.text)
-    ListDisplayPattern                       0x00000a58   Data          10  inputdata.o(.text)
-    $v0                                      0x00000a78   Number         0  gpioled.o(.text)
-    .text                                    0x00000a78   Section      552  gpioled.o(.text)
+    .text                                    0x00000658   Section      940  jogodamemoria.o(.text)
+    boasVindasHEX                            0x00000924   Data          28  jogodamemoria.o(.text)
+    pressButtonHEX                           0x00000940   Data          22  jogodamemoria.o(.text)
+    ruReadyHEX                               0x00000956   Data          14  jogodamemoria.o(.text)
+    roundHEX                                 0x00000964   Data           6  jogodamemoria.o(.text)
+    writeNumbHEX                             0x0000096a   Data          15  jogodamemoria.o(.text)
+    gameOverHEX                              0x00000979   Data          13  jogodamemoria.o(.text)
+    scoreHEX                                 0x00000986   Data          21  jogodamemoria.o(.text)
+    goodJobHEX                               0x0000099b   Data          24  jogodamemoria.o(.text)
+    congratsHEX                              0x000009b3   Data          18  jogodamemoria.o(.text)
+    vitoriasHEX                              0x000009c5   Data          10  jogodamemoria.o(.text)
+    matrixPsbility                           0x000009cf   Data           4  jogodamemoria.o(.text)
+    $v0                                      0x00000a04   Number         0  inputdata.o(.text)
+    .text                                    0x00000a04   Section      556  inputdata.o(.text)
+    mxToChar                                 0x00000b9e   Data          16  inputdata.o(.text)
+    randList                                 0x00000bae   Data         100  inputdata.o(.text)
+    ListDisplayPattern                       0x00000c12   Data          10  inputdata.o(.text)
+    $v0                                      0x00000c30   Number         0  gpioled.o(.text)
+    .text                                    0x00000c30   Section      552  gpioled.o(.text)
     StackMem                                 0x20000000   Data           0  startup.o(STACK)
     STACK                                    0x20000000   Section     1024  startup.o(STACK)
 
@@ -199,21 +203,21 @@ Image Symbol Table
     Start                                    0x00000659   Thumb Code     0  jogodamemoria.o(.text)
     ruReadyScreen                            0x000006ad   Thumb Code     0  jogodamemoria.o(.text)
     roundScreen                              0x000006cf   Thumb Code     0  jogodamemoria.o(.text)
-    writeNumbScreen                          0x000006e5   Thumb Code     0  jogodamemoria.o(.text)
-    gameOverScreen                           0x00000757   Thumb Code     0  jogodamemoria.o(.text)
-    pressedStart                             0x00000869   Thumb Code     0  inputdata.o(.text)
-    preparaLED                               0x00000881   Thumb Code     0  inputdata.o(.text)
-    RoundNumberHEXLCD                        0x000008df   Thumb Code     0  inputdata.o(.text)
-    whichKey                                 0x00000957   Thumb Code     0  inputdata.o(.text)
-    decipherMxChar                           0x00000973   Thumb Code     0  inputdata.o(.text)
-    actionKey                                0x00000985   Thumb Code     0  inputdata.o(.text)
-    compareData                              0x0000098f   Thumb Code     0  inputdata.o(.text)
-    GPIO_InitLED                             0x00000a79   Thumb Code     0  gpioled.o(.text)
-    LEDsequence                              0x00000b59   Thumb Code     0  gpioled.o(.text)
-    displayLeft                              0x00000b77   Thumb Code     0  gpioled.o(.text)
-    displayRight                             0x00000b97   Thumb Code     0  gpioled.o(.text)
-    actLed                                   0x00000bb7   Thumb Code     0  gpioled.o(.text)
-    GPIOPortJ_Handler                        0x00000bd7   Thumb Code     0  gpioled.o(.text)
+    writeNumbScreen                          0x000006e9   Thumb Code     0  jogodamemoria.o(.text)
+    gameOverScreen                           0x0000084f   Thumb Code     0  jogodamemoria.o(.text)
+    pressedStart                             0x00000a05   Thumb Code     0  inputdata.o(.text)
+    preparaLED                               0x00000a1d   Thumb Code     0  inputdata.o(.text)
+    RoundNumberHEXLCD                        0x00000a7b   Thumb Code     0  inputdata.o(.text)
+    whichKey                                 0x00000af7   Thumb Code     0  inputdata.o(.text)
+    decipherMxChar                           0x00000b13   Thumb Code     0  inputdata.o(.text)
+    actionKey                                0x00000b25   Thumb Code     0  inputdata.o(.text)
+    compareData                              0x00000b2f   Thumb Code     0  inputdata.o(.text)
+    GPIO_InitLED                             0x00000c31   Thumb Code     0  gpioled.o(.text)
+    LEDsequence                              0x00000d11   Thumb Code     0  gpioled.o(.text)
+    displayLeft                              0x00000d2f   Thumb Code     0  gpioled.o(.text)
+    displayRight                             0x00000d4f   Thumb Code     0  gpioled.o(.text)
+    actLed                                   0x00000d6f   Thumb Code     0  gpioled.o(.text)
+    GPIOPortJ_Handler                        0x00000d8f   Thumb Code     0  gpioled.o(.text)
 
 
 
@@ -223,26 +227,26 @@ Memory Map of the image
 
   Image Entry point : 0x00000209
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000ca0, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000e58, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000ca0, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000e58, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000000   0x00000220   Code   RO            8  * RESET               startup.o
     0x00000220   0x00000220   0x00000268   Code   RO            1    .text               gpio.o
     0x00000488   0x00000488   0x000001d0   Code   RO           15    .text               utils.o
-    0x00000658   0x00000658   0x00000210   Code   RO           19    .text               jogodamemoria.o
-    0x00000868   0x00000868   0x00000210   Code   RO           22    .text               inputdata.o
-    0x00000a78   0x00000a78   0x00000228   Code   RO           25    .text               gpioled.o
+    0x00000658   0x00000658   0x000003ac   Code   RO           19    .text               jogodamemoria.o
+    0x00000a04   0x00000a04   0x0000022c   Code   RO           22    .text               inputdata.o
+    0x00000c30   0x00000c30   0x00000228   Code   RO           25    .text               gpioled.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000ca0, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000e58, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
 
-    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x00000ca0, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x00000e58, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -258,13 +262,13 @@ Image component sizes
 
        616         84          0          0          0        428   gpio.o
        552        152          0          0          0        372   gpioled.o
-       528        148          0          0          0        340   inputdata.o
-       528        134          0          0          0        348   jogodamemoria.o
+       556        146          0          0          0        352   inputdata.o
+       940        224          0          0          0        448   jogodamemoria.o
        544        520          0          0       1024        752   startup.o
        464         92          0          0          0        364   utils.o
 
     ----------------------------------------------------------------------
-      3232       1130          0          0       1024       2604   Object Totals
+      3672       1218          0          0       1024       2716   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          0          0          0   (incl. Padding)
 
@@ -279,15 +283,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3232       1130          0          0       1024       2604   Grand Totals
-      3232       1130          0          0       1024       2604   ELF Image Totals
-      3232       1130          0          0          0          0   ROM Totals
+      3672       1218          0          0       1024       2716   Grand Totals
+      3672       1218          0          0       1024       2716   ELF Image Totals
+      3672       1218          0          0          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 3232 (   3.16kB)
+    Total RO  Size (Code + RO Data)                 3672 (   3.59kB)
     Total RW  Size (RW Data + ZI Data)              1024 (   1.00kB)
-    Total ROM Size (Code + RO Data + RW Data)       3232 (   3.16kB)
+    Total ROM Size (Code + RO Data + RW Data)       3672 (   3.59kB)
 
 ==============================================================================
 

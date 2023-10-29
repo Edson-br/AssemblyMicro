@@ -57,6 +57,12 @@
 		IMPORT	decipherMxChar
 		IMPORT	actionKey
 		IMPORT	compareData
+		; Good Job Screen
+		IMPORT	LEDsequence
+		IMPORT	displayLeft
+		IMPORT	displayRight
+			
+numbOfRounds EQU	4
 ; -------------------------------------------------------------------------------
 ; Função main()
 Start
@@ -101,6 +107,8 @@ ruReadyScreen
 	BX		LR
 	
 roundScreen
+	CMP		R5, #numbOfRounds
+	BEQ		goodJobScreen
 	BL		limpaLCD
 	LDR	R4, =roundHEX
 	MOV 	R10, #6
@@ -150,6 +158,89 @@ ALtoDetectPress
 	BLGE	actionKey
 	POP{LR}
 	BX		LR
+
+goodJobScreen
+	BL		limpaLCD
+	LDR	R4, =goodJobHEX
+	MOV 	R10, #12
+	MOV		R11, #25
+	BL		loopHEXLCD
+	MOV		R8,	#0
+	BL		goodJobLEDloop
+	BL		limpaLCD
+	LDR	R4, =congratsHEX
+	MOV 	R10, #14
+	MOV		R11, #19
+	BL		loopHEXLCD
+	MOV		R2, #100
+	UDIV	R1, R5, R2
+	MOV		R0, R1
+	ADD		R0, #0x30
+	PUSH{R1}
+	BL		escreverDadoLCD
+	POP{R1}
+	MLS		R12, R1, R2, R5
+	MOV		R2, #10
+	UDIV	R5, R12, R2
+	MOV		R0, R5
+	ADD		R0, #0x30
+	BL		escreverDadoLCD
+	MLS		R0, R5, R2, R12	
+	ADD		R0, #0x30
+	BL		escreverDadoLCD
+	LDR	R4, =vitoriasHEX
+	MOV 	R10, #10
+	MOV		R11, #10
+	BL		loopHEXLCD
+	MOV		R5, #0
+	BL		bigWINLoop
+	B		Start
+
+goodJobLEDloop
+	PUSH{LR}
+	BL		preparaLED
+	CMP	R8, #2
+	ITT	LO
+	ADDLO	R8, #1
+	BLO		goodJobLEDloop
+	POP{LR}
+	BX		LR
+
+goodJob7segsloop
+	PUSH{LR}
+	MOV	R0, #2_01111111
+goodJob7segsloop1	
+	BL	LEDsequence
+	PUSH{R0}
+	BL		displayLeft
+	BL		displayRight
+	CMP	R8, #26
+	POP{R0}
+	ITT	LO
+	ADDLO	R8, #1
+	BLO		goodJob7segsloop
+	CMP	R9, #7
+	MOV		R2, #2
+	ITT LO
+	ADDLO	R9, #1
+	MULLO	R0, R2
+	BLO		goodJob7segsloop1
+	POP{LR}
+	BX	LR
+	
+bigWINLoop
+	PUSH{LR}
+	MOV		R8,	#0
+	MOV		R9, #0
+	BL		goodJob7segsloop
+	MOV		R8,	#2	
+	BL		goodJobLEDloop
+	CMP		R5, #3
+	ITT		LO
+	ADDLO	R5, #1
+	BLO		bigWINLoop
+	POP{LR}
+	BX		LR
 	
 gameOverScreen
 	MOV 	R0, #250
@@ -157,10 +248,24 @@ gameOverScreen
 	BL		limpaLCD
 	LDR	R4, =gameOverHEX
 	MOV 	R10, #12
-	MOV		R11, #12
+	MOV		R11, #13
 	BL		loopHEXLCD
-	MOV 	R0, #2500
+	MOV 	R0, #1500
 	BL		SysTick_Wait1ms
+	BL		limpaLCD
+	LDR	R4, =scoreHEX
+	MOV 	R10, #13
+	MOV		R11, #22
+	BL		loopHEXLCD
+	MOV		R12, #10
+	SUB		R5, #1
+	UDIV	R11, R5, R12
+	MOV		R0, R11
+	ADD		R0, #0x30
+	BL		escreverDadoLCD
+	MLS		R0, R12, R11, R5
+	ADD		R0, #0x30
+	BL		escreverDadoLCD
 	BL		preparaLED
 	B		Start
 
@@ -191,7 +296,7 @@ dtBtPress		;detect button press
 	LDR	R4, =matrixPsbility
 	MOV R12, #0
 	PUSH{LR}
-	MOV	R3, #0
+	MOV	R3, #1
 loopDtKey
 	CMP R12, #3
 	ADD	R12, #1
@@ -203,11 +308,19 @@ loopDtKey
 	PUSH{R0}
 	BL	checkMxKey
 	POP{R0}
-	
+
+;Condições p/ preparar a seed da randomização
+	PUSH{R0, R1, R2}
 	CMP		R3, #99
 	ITE		HS
-	MOVHS	R3, #0
-	ADDLO	R3, #1
+	MOVHS	R3, #1
+	ADDLO	R3, #2
+	MOV		R1, #5
+	UDIV	R0, R3, R1
+	MLS		R2, R1, R0, R3
+	CMP		R2, #0
+	ADDEQ	R3, #2
+	POP{R0, R1, R2}
 	
 	CMP		R2, #0xf0
 	BEQ		loopDtKey
@@ -228,8 +341,16 @@ roundHEX		DCB		0x52, 0x6F, 0x75, 0x6E, 0x64, 0X20
 ;Round
 writeNumbHEX	DCB		0x44, 0x69, 0x67, 0x69, 0x74, 0x65, 0x20, 0x6F, 0X4E, 0X75, 0X6D, 0X65, 0X72, 0X6F, 0X3A
 ;Digite oNumero:
-gameOverHEX		DCB		0x20, 0x20, 0x47, 0x41, 0x4D, 0x45, 0x20, 0x4F, 0x56, 0x45, 0x52, 0x2E
-;    GAME OVER
+gameOverHEX		DCB		0x20, 0x20, 0x20, 0x47, 0x41, 0x4D, 0x45, 0x20, 0x4F, 0x56, 0x45, 0x52, 0x2E
+;    GAME OVER.
+scoreHEX		DCB		0x20, 0x20, 0x54, 0x4F, 0x54, 0x41, 0x4C, 0x20, 0x53, 0x43, 0x4F, 0x52, 0x45, 0x3A, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
+;  TOTAL SCORE:
+goodJobHEX		DCB		0x20, 0x20, 0x20, 0x20, 0x46, 0x4C, 0x41, 0x57, 0x4C, 0x45, 0x53, 0x53, 0x20, 0x20, 0x20, 0x20, 0x20, 0x56, 0x49, 0x43, 0x54, 0x4F, 0x52, 0x59
+;   Good Job!
+congratsHEX		DCB		0x50, 0x61, 0x72, 0x61, 0x62, 0x65, 0x6E, 0x73, 0x20, 0x70, 0x65, 0x6C, 0x61, 0x73, 0x20, 0x20, 0x20, 0x20
+;Parabens pelas
+vitoriasHEX		DCB		0x20, 0x56, 0x69, 0x74, 0x6F, 0x72, 0x69, 0x61, 0x73, 0x21
+; XXX vitorias!
 matrixPsbility	DCB		2_00001110, 2_00001101, 2_00001011, 2_00000111
 
 ; -------------------------------------------------------------------------------------------------------------------------

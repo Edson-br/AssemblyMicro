@@ -119,10 +119,6 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
-          <Key>DLGUARM</Key>
-        </SetRegEntry>
-        <SetRegEntry>
-          <Number>0</Number>
           <Key>ARMRTXEVENTFLAGS</Key>
           <Name>-L70 -Z18 -C0 -M0 -T1</Name>
         </SetRegEntry>
@@ -151,9 +147,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>35</LineNumber>
+          <LineNumber>175</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>2164</Address>
+          <Address>2916</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -162,7 +158,7 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>.\inputData.s</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\lab02\inputData.s\35</Expression>
+          <Expression>\\lab02\inputData.s\175</Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>

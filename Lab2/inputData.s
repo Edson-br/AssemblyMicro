@@ -91,8 +91,9 @@ RoundNumberHEXLCD
 
 ;Displaying numb in 7segs
 	MOV		R9, #0
-displayNumbIn7Segs
 	LDRB 	R6,	[R8]
+	BL		applyrdSeed
+displayNumbIn7Segs
 	MOV R12, #0
 	MOV	R11, #10
 acende7segs	
@@ -155,8 +156,9 @@ compareData
 	CMP		R9, #0
 	IT		EQ
 	LDREQ	R8, =randList
-	LDRB	R3, [R8], #1
-	CMP		R7, R3
+	LDRB	R6, [R8], #1
+	BL		applyrdSeed
+	CMP		R7, R6
 	IT		EQ
 	BLEQ	preparaLED
 	BEQ		isItLastnumb
@@ -167,7 +169,17 @@ isItLastnumb
 	CMP		R9, R5
 	BGE		roundScreen
 	B		writeNumbScreen
-	
+
+;Para proporcionar uma lista mais randomica.
+applyrdSeed
+	MOV		R0, #100
+	LDR		R4, =rdSeed
+	LDRB	R2, [R4]
+	MUL		R1, R2, R6
+	UDIV	R3, R1, R0
+	MLS		R6, R3, R0, R1
+	BX		LR
+
 
 ;Função que converte numero para 7segmentos
 numbSelector
