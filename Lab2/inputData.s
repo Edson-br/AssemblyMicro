@@ -88,10 +88,12 @@ RoundNumberHEXLCD
 	MLSNE 	R0, R10, R11, R5					;R3 <= R5 - R10*R11
 	ADD		R0, #0x30	
 	BL		escreverDadoLCD
+	MOV		R7, #0	
+	LDR		R8, =randList
 
-;Displaying numb in 7segs
+displayTheLastOnes
 	MOV		R9, #0
-	LDRB 	R6,	[R8]
+	LDRB 	R6,	[R8], #1
 	BL		applyrdSeed
 displayNumbIn7Segs
 	MOV R12, #0
@@ -112,7 +114,10 @@ acende7segs
 	ADDLO	R12, #1
 	MOVHS	R12, #0
 	BLO		acende7segs	
-	
+	CMP		R7, R5
+	ITT		LO
+	ADDLO	R7, #1
+	BLO		displayTheLastOnes
 	POP{LR}
 	ADD R5, #1
 	
