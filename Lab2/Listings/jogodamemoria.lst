@@ -1,0 +1,215 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; Contador
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; ------------------------------------------------------
+                       -------------------------
+    4 00000000                 THUMB                        ; Instruções do tip
+                                                            o Thumb-2
+    5 00000000         ; ------------------------------------------------------
+                       -------------------------
+    6 00000000         
+    7 00000000         ; Declarações EQU - Defines
+    8 00000000         ;<NOME>         EQU <VALOR>
+    9 00000000         ; ========================
+   10 00000000         ; Definições de Valores
+   11 00000000         
+   12 00000000         
+   13 00000000         ; ------------------------------------------------------
+                       -------------------------
+   14 00000000         ; Área de Dados - Declarações de variáveis
+   15 00000000                 AREA             DATA, ALIGN=2
+   16 00000000         ; Se alguma variável for chamada em outro arquivo
+   17 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
+                       riável <var> a 
+   18 00000000         ; partir de outro arquivo
+   19 00000000         ;<var> SPACE <tam>                        ; Declara uma 
+                       variável de nome <var>
+   20 00000000         ; de <tam> bytes a partir da primeira 
+   21 00000000         ; posição da RAM  
+   22 00000000         
+   23 00000000         ; ------------------------------------------------------
+                       -------------------------
+   24 00000000         ; Área de Código - Tudo abaixo da diretiva a seguir será
+                        armazenado na memória de 
+   25 00000000         ;                  código
+   26 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   27 00000000         
+   28 00000000         ; Se alguma função do arquivo for chamada em outro arqui
+                       vo 
+   29 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            função Start a part
+                                                            ir de 
+   30 00000000         ; outro arquivo. No caso startup.s
+   31 00000000                 IMPORT           PLL_Init
+   32 00000000                 IMPORT           SysTick_Init
+   33 00000000                 IMPORT           GPIO_Init
+   34 00000000                 IMPORT           SysTick_Wait1ms
+   35 00000000                 IMPORT           limpaLCD
+   36 00000000                 IMPORT           positionCursor
+   37 00000000                 IMPORT           escreverDadoLCD
+   38 00000000         ; ------------------------------------------------------
+                       -------------------------
+   39 00000000         ; Função main()
+   40 00000000         Start
+   41 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+                                                            para alterar o cloc
+                                                            k do microcontrolad
+                                                            or para 80MHz
+   42 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
+                                                             para inicializar o
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+                                                             SysTick
+   43 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+                                                            que inicializa os G
+                                                            PIO
+   44 0000000C         
+   45 0000000C         
+   46 0000000C F7FF FFFE       BL               limpaLCD
+   47 00000010         
+   48 00000010 F04F 0005       MOV              R0, #0005
+   49 00000014 F7FF FFFE       BL               SysTick_Wait1ms ;Espera 5ms
+   50 00000018         
+   51 00000018 F04F 0080       MOV              R0, #0x80
+   52 0000001C F7FF FFFE       BL               positionCursor
+   53 00000020         
+   54 00000020 F04F 0005       MOV              R0, #0005
+   55 00000024 F7FF FFFE       BL               SysTick_Wait1ms ;Espera 5ms
+   56 00000028         
+   57 00000028 F04F 001F       MOV              R0, #31
+   58 0000002C F7FF FFFE       BL               escreverDadoLCD
+   59 00000030         
+   60 00000030 BF00            NOP
+   61 00000032         
+   62 00000032         
+   63 00000032         
+   64 00000032         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       -----------
+   65 00000032         ; Fim do Arquivo
+   66 00000032         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       ----------- 
+   67 00000032 00 00           ALIGN                        ;Garante que o fim 
+                                                            da seção está alinh
+                                                            ada 
+   68 00000034                 END                          ;Fim do arquivo
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\jogodamemoria.d -o.\objects\jogodamemoria.o -I"E:\Sis
+ Micro\lab02\RTE" -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C
+129 -IC:\Keil_v5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__U
+VISION_VERSION SETA 518" --predefine="TM4C1294NCPDT SETA 1" --list=.\listings\j
+ogodamemoria.lst jogoDaMemoria.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 15 in file jogoDaMemoria.s
+   Uses
+      None
+Comment: DATA unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 26 in file jogoDaMemoria.s
+   Uses
+      None
+Comment: .text unused
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 40 in file jogoDaMemoria.s
+   Uses
+      At line 29 in file jogoDaMemoria.s
+Comment: Start used once
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+GPIO_Init 00000000
+
+Symbol: GPIO_Init
+   Definitions
+      At line 33 in file jogoDaMemoria.s
+   Uses
+      At line 43 in file jogoDaMemoria.s
+Comment: GPIO_Init used once
+PLL_Init 00000000
+
+Symbol: PLL_Init
+   Definitions
+      At line 31 in file jogoDaMemoria.s
+   Uses
+      At line 41 in file jogoDaMemoria.s
+Comment: PLL_Init used once
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 32 in file jogoDaMemoria.s
+   Uses
+      At line 42 in file jogoDaMemoria.s
+Comment: SysTick_Init used once
+SysTick_Wait1ms 00000000
+
+Symbol: SysTick_Wait1ms
+   Definitions
+      At line 34 in file jogoDaMemoria.s
+   Uses
+      At line 49 in file jogoDaMemoria.s
+      At line 55 in file jogoDaMemoria.s
+
+escreverDadoLCD 00000000
+
+Symbol: escreverDadoLCD
+   Definitions
+      At line 37 in file jogoDaMemoria.s
+   Uses
+      At line 58 in file jogoDaMemoria.s
+Comment: escreverDadoLCD used once
+limpaLCD 00000000
+
+Symbol: limpaLCD
+   Definitions
+      At line 35 in file jogoDaMemoria.s
+   Uses
+      At line 46 in file jogoDaMemoria.s
+Comment: limpaLCD used once
+positionCursor 00000000
+
+Symbol: positionCursor
+   Definitions
+      At line 36 in file jogoDaMemoria.s
+   Uses
+      At line 52 in file jogoDaMemoria.s
+Comment: positionCursor used once
+7 symbols
+344 symbols in table
