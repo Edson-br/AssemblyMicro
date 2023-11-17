@@ -33,6 +33,18 @@ GPIO_PORTQ_AHB_DATA_R    	EQU    	0x400663FC
 GPIO_PORTQ               	EQU    	2_100000000000000	
 
 
+; PORT H
+GPIO_PORTH_AHB_LOCK_R    	EQU    	0x4005F520
+GPIO_PORTH_AHB_CR_R      	EQU    	0x4005F524
+GPIO_PORTH_AHB_AMSEL_R   	EQU    	0x4005F528
+GPIO_PORTH_AHB_PCTL_R    	EQU    	0x4005F52C
+GPIO_PORTH_AHB_DIR_R     	EQU    	0x4005F400
+GPIO_PORTH_AHB_AFSEL_R   	EQU    	0x4005F420
+GPIO_PORTH_AHB_DEN_R     	EQU    	0x4005F51C
+GPIO_PORTH_AHB_PUR_R     	EQU    	0x4005F510	
+GPIO_PORTH_AHB_DATA_R    	EQU    	0x4005F3FC
+GPIO_PORTH               	EQU    	2_000000010000000	
+
 ; PORT K
 GPIO_PORTK_AHB_LOCK_R    	EQU    	0x40061520
 GPIO_PORTK_AHB_CR_R      	EQU    	0x40061524
@@ -108,10 +120,14 @@ GPIO_PORTJ_AHB_IS_R 		EQU		0x40060404
 GPIO_PORTJ_AHB_IBE_R 		EQU		0x40060408
 GPIO_PORTJ_AHB_IEV_R		EQU		0x4006040C
 GPIO_PORTJ_AHB_ICR_R 		EQU		0x4006041C
-GPIO_PORTJ_AHB_IM_R			EQU	   	0x40060410
+GPIO_PORTJ_AHB_IM_R		EQU	   	0x40060410
 
 GPIO_PORTJ_AHB_RIS_R		EQU		0x40060414
 GPIO_PORTJ_AHB_MIS_R    	EQU		0x40060418
+
+;NVIC registers
+NVIC_EN1_R					EQU		0xE000E104
+NVIC_PRI12_R 				EQU		0xE000E430
 ; -------------------------------------------------------------------------------
 ; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
 ;                  código
@@ -119,18 +135,11 @@ GPIO_PORTJ_AHB_MIS_R    	EQU		0x40060418
 
 		; Se alguma função do arquivo for chamada em outro arquivo	
         EXPORT 	GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
-		EXPORT 	limpaLCD
-		EXPORT	positionCursor
-		EXPORT	escreverDadoLCD
-		EXPORT	enableLCD
-		EXPORT	disableLCD
-		EXPORT  controleLCD
-		EXPORT	modoLCD
-		EXPORT	moveCursor
-		EXPORT	resetCursorPosition	
-		EXPORT	numbFromM4x4
+		EXPORT	GPIOPortJ_Handler
+		EXPORT	goToMenu
 			
-		IMPORT 	SysTick_Wait1ms
+		IMPORT	mainMenu
+
 ;--------------------------------------------------------------------------------
 ; Função GPIO_Init
 ; Parâmetro de entrada: Não tem
@@ -143,7 +152,7 @@ GPIO_Init
             LDR     R0, =SYSCTL_RCGCGPIO_R  		;Carrega o endereço do registrador RCGCGPIO
 			ORR		R1, #GPIO_PORTA
 			ORR		R1, #GPIO_PORTQ
-
+			ORR		R1, #GPIO_PORTH
 			ORR		R1, #GPIO_PORTK
 			ORR		R1, #GPIO_PORTM
 			ORR		R1, #GPIO_PORTL
@@ -158,7 +167,7 @@ GPIO_Init
 EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do registrador
 			ORR     R2, #GPIO_PORTA
 			ORR     R2, #GPIO_PORTQ
-
+			ORR     R2, #GPIO_PORTH
 			ORR		R2, #GPIO_PORTK
 			ORR		R2, #GPIO_PORTM
 			ORR		R2, #GPIO_PORTL
@@ -171,7 +180,11 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
             BEQ     EsperaGPIO					    ;Se o flag Z=1, volta para o laço. Senão continua executando
  
 ; 2. Limpar o AMSEL para desabilitar a analógica
-            MOV     R1, #0x00						;Colocar 0 no registrador para desabilitar a função analógica	    
+            MOV     R1, #0x00						;Colocar 0 no registrador para desabilitar a função analógica	
+            LDR     R0, =GPIO_PORTJ_AHB_AMSEL_R     ;Carrega o R0 com o endereço do AMSEL para a porta J
+            STR     R1, [R0]						;Guarda no registrador AMSEL da porta J da memória			
+			LDR     R0, =GPIO_PORTH_AHB_AMSEL_R		
+            STR     R1, [R0]			
 			LDR     R0, =GPIO_PORTK_AHB_AMSEL_R		
             STR     R1, [R0]					    
 			LDR     R0, =GPIO_PORTM_AHB_AMSEL_R		
@@ -180,9 +193,13 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
             STR     R1, [R0]					    
  
 ; 3. Limpar PCTL para selecionar o GPIO
-            MOV     R1, #0x00					    ;Colocar 0 no registrador para selecionar o modo GPIO                
+            MOV     R1, #0x00					    ;Colocar 0 no registrador para selecionar o modo GPIO      
+            LDR     R0, =GPIO_PORTJ_AHB_PCTL_R		;Carrega o R0 com o endereço do PCTL para a porta J
+            STR     R1, [R0]                        ;Guarda no registrador PCTL da porta J da memória				
 			LDR     R0, =GPIO_PORTK_AHB_PCTL_R		
-            STR     R1, [R0]					    
+            STR     R1, [R0]					
+			LDR     R0, =GPIO_PORTH_AHB_PCTL_R		
+            STR     R1, [R0]							
 			LDR     R0, =GPIO_PORTM_AHB_PCTL_R		
             STR     R1, [R0]					    
 			LDR     R0, =GPIO_PORTL_AHB_PCTL_R		
@@ -196,20 +213,30 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
 			MOV     R1, #2_00000111					
             STR     R1, [R0]						
 			
+			LDR     R0, =GPIO_PORTH_AHB_DIR_R		
+			MOV     R1, #2_00001111					
+            STR     R1, [R0]			
+			
             LDR     R0, =GPIO_PORTL_AHB_DIR_R		
 			MOV     R1, #2_11111111					
             STR     R1, [R0]						
 			; O certo era verificar os outros bits da PF para não transformar entradas em saídas desnecessárias
+            LDR     R0, =GPIO_PORTJ_AHB_DIR_R		;Carrega o R0 com o endereço do DIR para a porta J
+            MOV     R1, #0x00               		;Colocar 0 no registrador DIR para funcionar com saída
+            STR     R1, [R0]						;Guarda no registrador PCTL da porta J da memória
 ; 5. Limpar os bits AFSEL para 0 para selecionar GPIO 
 ;    Sem função alternativa
             MOV     R1, #0x00						;Colocar o valor 0 para não setar função alternativa				
             LDR     R0, =GPIO_PORTK_AHB_AFSEL_R		
             STR     R1, [R0]						
             LDR     R0, =GPIO_PORTM_AHB_AFSEL_R		
-            STR     R1, [R0]						
+            STR     R1, [R0]				
+            LDR     R0, =GPIO_PORTH_AHB_AFSEL_R		
+            STR     R1, [R0]					
             LDR     R0, =GPIO_PORTL_AHB_AFSEL_R     
             STR     R1, [R0]                        
-
+            LDR     R0, =GPIO_PORTJ_AHB_AFSEL_R     ;Carrega o endereço do AFSEL da porta J
+            STR     R1, [R0]                        ;Escreve na porta
 ; 6. Setar os bits de DEN para habilitar I/O digital 						
 			LDR     R0, =GPIO_PORTK_AHB_DEN_R			
 			MOV     R1, #2_11111111						
@@ -217,217 +244,80 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
             LDR     R0, =GPIO_PORTM_AHB_DEN_R			
 			MOV     R1, #2_11110111						
             STR     R1, [R0]							
+            LDR     R0, =GPIO_PORTH_AHB_DEN_R			
+			MOV     R1, #2_00001111						
+            STR     R1, [R0]				
             LDR     R0, =GPIO_PORTL_AHB_DEN_R			
 			MOV     R1, #2_00001111						
-            STR     R1, [R0]							
+            STR     R1, [R0]				
+            LDR     R0, =GPIO_PORTJ_AHB_DEN_R			;Carrega o endereço do DEN
+			MOV     R1, #2_00000011                     ;Ativa os pinos PJ0 e PJ1 como I/O Digital      
+            STR     R1, [R0]                            ;Escreve no registrador da memória funcionalidade digital			
 ; 7. Para habilitar resistor de pull-up interno, setar PUR para 1
-			LDR     R0, =GPIO_PORTM_AHB_PUR_R			;Carrega o endereço do PUR para a porta J
-			MOV     R1, #2_11110000						;Habilitar funcionalidade digital de resistor de pull-up 
+			LDR     R0, =GPIO_PORTM_AHB_PUR_R			;Carrega o endereço do PUR para a porta M
+			MOV     R1, #2_11110000						
+                                                        
+            STR     R1, [R0]							
+
+
+; 7. Para habilitar resistor de pull-up interno, setar PUR para 1
+			LDR     R0, =GPIO_PORTJ_AHB_PUR_R			;Carrega o endereço do PUR para a porta J
+			MOV     R1, #2_00000011						;Habilitar funcionalidade digital de resistor de pull-up 
                                                         ;nos bits 0 e 1
-            STR     R1, [R0]							;Escreve no registrador da memória do resistor de pull-up
+			STR     R1, [R0]	
 
-
+; 8. Habilitando interrupção na portaJ
+			LDR		R0, =GPIO_PORTJ_AHB_IM_R
+			MOV		R1, #2_00000000
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IS_R 
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IBE_R
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IEV_R
+			MOV		R1, #2_00000011
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_ICR_R
+			MOV		R1, #2_00000011
+			STR		R1, [R0]
+			
+			LDR		R0, =GPIO_PORTJ_AHB_IM_R
+			MOV		R1, #2_00000011
+			
+			LDR		R0, =NVIC_EN1_R
+			MOV		R1, #1
+			LSL		R1, #19
+			STR		R1, [R0]
+			
+			LDR		R0, =NVIC_PRI12_R
+			MOV		R1, #5
+			LSL		R1, #29
+			STR		R1, [R0]
 ;retorno            
 			BX      LR
-;Enables e disable para LCD
-;a princípio basta executar enableLCD q o código do disableLCD é executado após 5ms
-;e dps de mais 5ms ele volta para o main
-enableLCD
-	LDR	R1, =GPIO_PORTM_AHB_DATA_R		    
-	;Read-Modify-Write para escrita
-	MOV	R0, #2_00000100
-	LDR R2, [R1]
-	BIC R2, #2_00000111                     
-	ORR R0, R0, R2                          
-	STR R0, [R1]                            
-	PUSH	{LR}
-	MOV 	R0, #0005
-	BL		SysTick_Wait1ms					;Espera 5ms
-	BL		disableLCD
-	POP		{LR}
-	BX 		LR
+
+goToMenu
+	B	mainMenu
+
+GPIOPortJ_Handler
+	LDR R1, =GPIO_PORTJ_AHB_RIS_R
+	LDR R0, [R1]
 	
-enableRWLCD
-	LDR	R1, =GPIO_PORTM_AHB_DATA_R		    
-	;Read-Modify-Write para escrita
-	MOV	R0, #2_00000101
-	LDR R2, [R1]
-	BIC R2, #2_00000111                     
-	ORR R0, R0, R2                          
-	STR R0, [R1]                            
-	PUSH	{LR}
-	MOV 	R0, #0005
-	BL		SysTick_Wait1ms					;Espera 5ms
-	POP		{LR}
-
-disableLCD
-	LDR	R1, =GPIO_PORTM_AHB_DATA_R		    
-	;Read-Modify-Write para escrita
-	MOV	R0, #2_00000000
-	LDR R2, [R1]
-	BIC R2, #2_00000111                     
-	ORR R0, R0, R2                          
-	STR R0, [R1]                            
-	PUSH	{LR}
-	MOV 	R0, #0005
-	BL		SysTick_Wait1ms					;Espera 5ms
-	POP		{LR}
-	BX 		LR
-
-;Organização das operações de acordo com a tabela fornecida
-
-limpaLCD
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R		    
-	;Read-Modify-Write para escrita
-	LDR R2, [R1]
-	MOV R0, #2_00000001                     
-	STR R0, [R1]
-	PUSH	{LR}
-	BL		enableLCD
-	POP		{LR}	
-	BX 		LR
-
-resetCursorPosition					;Retorn. Cursor
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	MOV R0, #2_00000010
-	BIC R2, #0xFE                     		
-	ORR R0, R0, R2                          
-	STR R0, [R1]  
-	PUSH	{LR}
-	BL		enableLCD
-	POP		{LR}
-	BX 		LR
-
-controleLCD							
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	MOV R0, #2_00001111				;00001ABC		A==Ativa display(1 exibe, 0 apaga), B==liga/deslig cursor (1liga, 0deslig)
-	STR R0, [R1]					;				C==habilita cursor piscante
-	PUSH	{LR}
-	BL		enableLCD
-	POP		{LR}
-	BX 		LR
-
-deslocaMSG							;Deslocam. Cursor/LCD
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	MOV R0, #2_00011100				;com S/C setado para 1, fazendo com q seja ativada a operação q desloca msg
-	BIC R2, #2_11111100                     		
-	ORR R0, R0, R2 	
-	STR R0, [R1]
-	PUSH	{LR}
-	BL		enableLCD
-	POP		{LR}
-	BX 		LR
-
-moveCursor							;Deslocam. Cursor/LCD
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	BIC R2, #2_11111100                   
-	ORR R0, R0, R2 					;entrada R0 == 0001ABxx; A == Display ou cursor, B == Direita ou esquerda
-	STR R0, [R1]
-	PUSH	{LR}
-	BL		enableLCD
-	POP		{LR}
-	BX 		LR
-
-modoLCD								
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	MOV R0, #2_00111100				;001ABCXX	A==largura dos dados enviados(1 8bits 0 4bits), B==numb de linhas (1 2linhas 0 1linha)
-	BIC R2, #2_11111100             ;			C == fonte das letras (1 5x10 pixels 0 5x7 pixels)		
-	ORR R0, R0, R2	
-	STR R0, [R1]
-	PUSH	{LR}
-	BL		enableLCD
-	POP		{LR}
-	BX 		LR
+	CMP R0, #1
+	BEQ	trueHandler
 	
+	BX LR
 
-positionCursor						;entrada R0 == posição que queremos; primeira linha vai de 80h~8Fh, segunda linha vai de C0h~CFh
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	LDR R2, [R1]
-	BIC R2, #0xFF                     		
-	ORR R0, R0, R2                          
-	STR R0, [R1]                            
-	PUSH	{LR}
-	BL		enableLCD
-	POP		{LR}
-	BX 		LR
-
-
-escreverDadoLCD
-	LDR	R1, =GPIO_PORTK_AHB_DATA_R		    
-	;Read-Modify-Write para escrita
-	LDR R2, [R1]
-	BIC R2, #0xFF                     		
-	ORR R0, R0, R2                          
-	STR R0, [R1]                            
-	PUSH	{LR}
-	BL		enableRWLCD
-	POP		{LR}
-	BX 		LR
-
-;=====================
-;Teclado matricial
-;=====================
-numbFromM4x4		;detect button press
-	LDR	R4, =matrixPsbility
-	MOV R12, #0
-	PUSH{LR}
-	MOV	R3, #1
-loopDtKey
-	CMP R12, #3
-	ADD	R12, #1
-	ITT	EQ
-	LDREQ	R4, =matrixPsbility-1
-	MOVEQ	R12, #0
-	
-	LDRB R0, [R4, #1]!
-	PUSH{R0}
-	BL	checkMxKey
-	POP{R0}
-	
-	CMP		R2, #0xf0
-	BEQ		loopDtKey
-	POP{LR}
-
-whichKey
-	ORR	R6, R2, R0
-	LDR	R4, =mxToChar
-	MOV	R0, #0
-FO_WhichKey	
-	LDRB	R10, [R4]
-	CMP	R6, R10
-	ADDNE	R0,#1
-	ADDNE	R4, #1
-	BNE		FO_WhichKey
-	PUSH	{LR, R0}
-	MOV 	R0, #200
-	BL		SysTick_Wait1ms					;Espera 5ms
-	POP		{LR, R0}
-	IT		EQ
-	BXEQ	LR
-
-checkMxKey
-	LDR	R1, =GPIO_PORTL_AHB_DATA_R
-	LDR R2, [R1]
-	BIC R2, #2_00001111                     		
-	ORR R0, R0, R2                          
-	STR R0, [R1]
-
-	LDR	R1, =GPIO_PORTM_AHB_DATA_R
-	LDR	R2, [R1]
-
-	PUSH	{R2, LR}
-	MOV 	R0, #25
-	BL		SysTick_Wait1ms					;Espera 5ms
-	POP		{R2, LR}
-	
-	MOV		R0, R2
+trueHandler
+	MOV	R1, #2_00000011
+	LDR R2, =GPIO_PORTJ_AHB_ICR_R
+	STR R1, [R2]
+	BEQ	mainMenu
 	BX	LR
 
-
-
-	BX	LR									;Retorno
-
-matrixPsbility	DCB		2_00001110, 2_00001101, 2_00001011, 2_00000111
-mxToChar		DCB		0xEB, 0x77, 0x7B, 0x7D, 0xB7, 0xBB,0xBD, 0xD7, 0xDB, 0xDD,0x7E, 0xBE, 0xDE, 0xEE, 0xE7 , 0xED
     ALIGN                           ; garante que o fim da seção está alinhada 
     END                             ; fim do arquivo

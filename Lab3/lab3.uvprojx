@@ -409,6 +409,16 @@
               <FileType>2</FileType>
               <FilePath>.\gpio.s</FilePath>
             </File>
+            <File>
+              <FileName>gpioFunctions.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\gpioFunctions.s</FilePath>
+            </File>
+            <File>
+              <FileName>gpioLED.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\gpioLED.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
