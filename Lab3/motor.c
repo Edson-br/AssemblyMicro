@@ -1,22 +1,18 @@
 // main.c
 // Desenvolvido para a placa EK-TM4C1294XL
-// Verifica o estado das chaves USR_SW1 e USR_SW2, acende os LEDs 1 e 2 caso estejam pressionadas independentemente
-// Caso as duas chaves estejam pressionadas ao mesmo tempo pisca os LEDs alternadamente a cada 500ms.
+// Faz o giro de um motor de passo definindo o numero de voltas, o sentido da rotacao e o passo
+// atravez de um teclado matricial 4x4 e atualizando o usuario do estado do motor por um display LCD
 
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
+//declaracao das funcoes implementadas em assembly
 void PLL_Init(void);
 void SysTick_Init(void);
 void SysTick_Wait1ms(uint32_t delay);
 void GPIO_Init(void);
 
-int voltas;
-int rotacao;
-int velocidade;
-int potencia10;
-int inputMx;
 
 uint32_t inputNumb(void);
 void displayPortA(uint32_t state);
@@ -33,6 +29,16 @@ void motorPasso(uint32_t velo);
 void GPIOPortJ_Handler(void);
 void goToMenu(void);
 
+//variaveis locais
+int voltas;
+int rotacao;
+int velocidade;
+int potencia10;
+int inputMx;
+
+//funcao que percorre uma string imprimindo-a no display LCD
+//Entrada: string a ser impressa
+//Saida:
 void str2LCD(char* text)
 {
 	int count = 0;
@@ -49,7 +55,9 @@ void str2LCD(char* text)
 	}
 }
 
-
+//funcoes de inicializacao (parametros de execucao)
+//Entrada: valores de voltas, direcao de rotacao, e passo respectivamente
+//Saida:
 void cleanVoltas(void)
 {
 		limpaLCD();
