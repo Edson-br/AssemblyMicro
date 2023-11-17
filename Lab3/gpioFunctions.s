@@ -235,6 +235,10 @@ checkMxKey
 
 motorPasso
 	MOV	R4, #0
+	CMP R0, #16
+	ITE	HS
+	MOVHS R11, #4096
+	MOVLO R11, #2048
 	LDR R12, =passoComp0
 	ADD R12, R0
 	MOV	R5, R12
@@ -256,7 +260,7 @@ passoLoop
 	CMP R1, #0
 	MOVEQ R5, R12
 	
-	CMP 	R4, #2048	
+	CMP 	R4, R11	
 	IT		LE
 	BLE		passoLoop
 
