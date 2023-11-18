@@ -24,13 +24,11 @@ Section Cross References
     motor.o(.ARM.exidx.text.cleanVoltas) refers to motor.o(.text.cleanVoltas) for [Anonymous Symbol]
     motor.o(.text.cleanRotacao) refers to gpiofunctions.o(.text) for limpaLCD
     motor.o(.text.cleanRotacao) refers to motor.o(.bss.rotacao) for rotacao
-    motor.o(.text.cleanRotacao) refers to motor.o(.bss.potencia10) for potencia10
     motor.o(.text.cleanRotacao) refers to motor.o(.rodata.str1.1) for .L.str.1
     motor.o(.text.cleanRotacao) refers to motor.o(.text.str2LCD) for str2LCD
     motor.o(.ARM.exidx.text.cleanRotacao) refers to motor.o(.text.cleanRotacao) for [Anonymous Symbol]
     motor.o(.text.cleanVelo) refers to gpiofunctions.o(.text) for limpaLCD
     motor.o(.text.cleanVelo) refers to motor.o(.bss.velocidade) for velocidade
-    motor.o(.text.cleanVelo) refers to motor.o(.bss.potencia10) for potencia10
     motor.o(.text.cleanVelo) refers to motor.o(.rodata.str1.1) for .L.str.2
     motor.o(.text.cleanVelo) refers to motor.o(.text.str2LCD) for str2LCD
     motor.o(.ARM.exidx.text.cleanVelo) refers to motor.o(.text.cleanVelo) for [Anonymous Symbol]
@@ -43,6 +41,7 @@ Section Cross References
     motor.o(.ARM.exidx.text.pressbutton) refers to motor.o(.text.pressbutton) for [Anonymous Symbol]
     motor.o(.text.main) refers to utils.o(.text) for PLL_Init
     motor.o(.text.main) refers to gpio.o(.text) for GPIO_Init
+    motor.o(.text.main) refers to gpioled.o(.text) for GPIO_InitLED
     motor.o(.text.main) refers to gpiofunctions.o(.text) for controleLCD
     motor.o(.text.main) refers to motor.o(.text.pressbutton) for pressbutton
     motor.o(.ARM.exidx.text.main) refers to motor.o(.text.main) for [Anonymous Symbol]
@@ -55,10 +54,13 @@ Section Cross References
     motor.o(.text.mainMenu) refers to motor.o(.bss.rotacao) for rotacao
     motor.o(.text.mainMenu) refers to motor.o(.text.cleanVelo) for cleanVelo
     motor.o(.text.mainMenu) refers to motor.o(.bss.velocidade) for velocidade
+    motor.o(.text.mainMenu) refers to motor.o(.rodata.str1.1) for .L.str.4
+    motor.o(.text.mainMenu) refers to motor.o(.text.str2LCD) for str2LCD
     motor.o(.text.mainMenu) refers to motor.o(.text.pressbutton) for pressbutton
     motor.o(.ARM.exidx.text.mainMenu) refers to motor.o(.text.mainMenu) for [Anonymous Symbol]
     gpio.o(.text) refers to motor.o(.text.mainMenu) for mainMenu
     gpiofunctions.o(.text) refers to utils.o(.text) for SysTick_Wait1ms
+    gpiofunctions.o(.text) refers to gpioled.o(.text) for LEDsequence
     gpiofunctions.o(.text) refers to gpio.o(.text) for GPIOPortJ_Handler
     gpioled.o(.text) refers to utils.o(.text) for SysTick_Wait1ms
     __main.o(!!!main) refers to __rtentry.o(.ARM.Collect$$rtentry$$00000000) for __rt_entry
@@ -182,9 +184,8 @@ Removing Unused input sections from the image.
     Removing motor.o(.ARM.exidx.text.main), (8 bytes).
     Removing motor.o(.ARM.exidx.text.mainMenu), (8 bytes).
     Removing motor.o(.ARM.use_no_argv), (4 bytes).
-    Removing gpioled.o(.text), (348 bytes).
 
-10 unused section(s) (total 408 bytes) removed from the image.
+9 unused section(s) (total 60 bytes) removed from the image.
 
 ==============================================================================
 
@@ -306,32 +307,41 @@ Image Symbol Table
     $v0                                      0x000004b0   Number         0  gpio.o(.text)
     .text                                    0x000004b0   Section      500  gpio.o(.text)
     $v0                                      0x000006a4   Number         0  gpiofunctions.o(.text)
-    .text                                    0x000006a4   Section      632  gpiofunctions.o(.text)
-    matrixPsbility                           0x000008c8   Data           4  gpiofunctions.o(.text)
-    mxToChar                                 0x000008cc   Data          16  gpiofunctions.o(.text)
-    passoComp0                               0x000008dc   Data           8  gpiofunctions.o(.text)
-    .text                                    0x0000091c   Section        0  strlen.o(.text)
-    .text                                    0x0000095a   Section        0  heapauxi.o(.text)
-    .text                                    0x00000960   Section       74  sys_stackheap_outer.o(.text)
-    .text                                    0x000009aa   Section        0  exit.o(.text)
-    .text                                    0x000009bc   Section        8  libspace.o(.text)
-    .text                                    0x000009c4   Section        0  sys_exit.o(.text)
-    .text                                    0x000009d0   Section        2  use_no_semi.o(.text)
-    .text                                    0x000009d2   Section        0  indicate_semi.o(.text)
-    [Anonymous Symbol]                       0x000009d4   Section        0  motor.o(.text.cleanRotacao)
-    [Anonymous Symbol]                       0x00000a00   Section        0  motor.o(.text.cleanVelo)
-    [Anonymous Symbol]                       0x00000a2c   Section        0  motor.o(.text.cleanVoltas)
-    [Anonymous Symbol]                       0x00000a58   Section        0  motor.o(.text.main)
-    [Anonymous Symbol]                       0x00000a7c   Section        0  motor.o(.text.mainMenu)
-    [Anonymous Symbol]                       0x00000df8   Section        0  motor.o(.text.pressbutton)
-    [Anonymous Symbol]                       0x00000e40   Section        0  motor.o(.text.str2LCD)
-    $v0                                      0x00000e88   Number         0  fpinit.o(x$fpl$fpinit)
-    x$fpl$fpinit                             0x00000e88   Section       26  fpinit.o(x$fpl$fpinit)
-    .L.str.1                                 0x00000ea2   Data          24  motor.o(.rodata.str1.1)
-    [Anonymous Symbol]                       0x00000ea2   Section        0  motor.o(.rodata.str1.1)
-    .L.str.2                                 0x00000eba   Data          24  motor.o(.rodata.str1.1)
-    .L.str                                   0x00000ed2   Data          31  motor.o(.rodata.str1.1)
-    .L.str.3                                 0x00000ef1   Data          22  motor.o(.rodata.str1.1)
+    .text                                    0x000006a4   Section      724  gpiofunctions.o(.text)
+    matrixPsbility                           0x0000090e   Data           4  gpiofunctions.o(.text)
+    mxToChar                                 0x00000912   Data          16  gpiofunctions.o(.text)
+    passoComp0                               0x00000922   Data           8  gpiofunctions.o(.text)
+    passoHora                                0x00000942   Data           4  gpiofunctions.o(.text)
+    passoanti                                0x00000946   Data           4  gpiofunctions.o(.text)
+    $v0                                      0x00000978   Number         0  gpioled.o(.text)
+    .text                                    0x00000978   Section      348  gpioled.o(.text)
+    .text                                    0x00000ad4   Section        0  strlen.o(.text)
+    .text                                    0x00000b12   Section        0  heapauxi.o(.text)
+    .text                                    0x00000b18   Section       74  sys_stackheap_outer.o(.text)
+    .text                                    0x00000b62   Section        0  exit.o(.text)
+    .text                                    0x00000b74   Section        8  libspace.o(.text)
+    .text                                    0x00000b7c   Section        0  sys_exit.o(.text)
+    .text                                    0x00000b88   Section        2  use_no_semi.o(.text)
+    .text                                    0x00000b8a   Section        0  indicate_semi.o(.text)
+    [Anonymous Symbol]                       0x00000b8c   Section        0  motor.o(.text.cleanRotacao)
+    [Anonymous Symbol]                       0x00000bac   Section        0  motor.o(.text.cleanVelo)
+    [Anonymous Symbol]                       0x00000bcc   Section        0  motor.o(.text.cleanVoltas)
+    [Anonymous Symbol]                       0x00000bf8   Section        0  motor.o(.text.main)
+    [Anonymous Symbol]                       0x00000c20   Section        0  motor.o(.text.mainMenu)
+    [Anonymous Symbol]                       0x00001028   Section        0  motor.o(.text.pressbutton)
+    [Anonymous Symbol]                       0x00001070   Section        0  motor.o(.text.str2LCD)
+    $v0                                      0x000010b8   Number         0  fpinit.o(x$fpl$fpinit)
+    x$fpl$fpinit                             0x000010b8   Section       26  fpinit.o(x$fpl$fpinit)
+    .L.str.1                                 0x000010d2   Data          24  motor.o(.rodata.str1.1)
+    [Anonymous Symbol]                       0x000010d2   Section        0  motor.o(.rodata.str1.1)
+    .L.str.2                                 0x000010ea   Data          24  motor.o(.rodata.str1.1)
+    .L.str.4                                 0x00001102   Data          11  motor.o(.rodata.str1.1)
+    .L.str.5                                 0x0000110d   Data          18  motor.o(.rodata.str1.1)
+    .L.str.7                                 0x0000111f   Data          11  motor.o(.rodata.str1.1)
+    .L.str.6                                 0x0000112a   Data          11  motor.o(.rodata.str1.1)
+    .L.str                                   0x00001135   Data          31  motor.o(.rodata.str1.1)
+    .L.str.3                                 0x00001154   Data          22  motor.o(.rodata.str1.1)
+    .L.str.8                                 0x0000116a   Data           5  motor.o(.rodata.str1.1)
     .bss                                     0x20000000   Section       96  libspace.o(.bss)
     HeapMem                                  0x20000078   Data           0  startup.o(HEAP)
     StackMem                                 0x20000078   Data           0  startup.o(STACK)
@@ -541,41 +551,46 @@ Image Symbol Table
     GPIOPortJ_Handler                        0x000005f9   Thumb Code     0  gpio.o(.text)
     enableLCD                                0x000006a5   Thumb Code     0  gpiofunctions.o(.text)
     disableLCD                               0x000006eb   Thumb Code     0  gpiofunctions.o(.text)
-    limpaLCD                                 0x0000070d   Thumb Code     0  gpiofunctions.o(.text)
-    resetCursorPosition                      0x00000723   Thumb Code     0  gpiofunctions.o(.text)
-    controleLCD                              0x0000073f   Thumb Code     0  gpiofunctions.o(.text)
-    moveCursor                               0x0000076f   Thumb Code     0  gpiofunctions.o(.text)
-    nxline                                   0x00000787   Thumb Code     0  gpiofunctions.o(.text)
-    modoLCD                                  0x00000797   Thumb Code     0  gpiofunctions.o(.text)
-    positionCursor                           0x000007b3   Thumb Code     0  gpiofunctions.o(.text)
-    escreverDadoLCD                          0x000007cd   Thumb Code     0  gpiofunctions.o(.text)
-    inputNumb                                0x000007e7   Thumb Code     0  gpiofunctions.o(.text)
-    motorPasso                               0x00000865   Thumb Code     0  gpiofunctions.o(.text)
-    strlen                                   0x0000091d   Thumb Code    62  strlen.o(.text)
-    __use_two_region_memory                  0x0000095b   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_escrow$2region                 0x0000095d   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_expand$2region                 0x0000095f   Thumb Code     2  heapauxi.o(.text)
-    __user_setup_stackheap                   0x00000961   Thumb Code    74  sys_stackheap_outer.o(.text)
-    exit                                     0x000009ab   Thumb Code    18  exit.o(.text)
-    __user_libspace                          0x000009bd   Thumb Code     8  libspace.o(.text)
-    __user_perproc_libspace                  0x000009bd   Thumb Code     0  libspace.o(.text)
-    __user_perthread_libspace                0x000009bd   Thumb Code     0  libspace.o(.text)
-    _sys_exit                                0x000009c5   Thumb Code     8  sys_exit.o(.text)
-    __I$use$semihosting                      0x000009d1   Thumb Code     0  use_no_semi.o(.text)
-    __use_no_semihosting_swi                 0x000009d1   Thumb Code     2  use_no_semi.o(.text)
-    __semihosting_library_function           0x000009d3   Thumb Code     0  indicate_semi.o(.text)
-    cleanRotacao                             0x000009d5   Thumb Code    42  motor.o(.text.cleanRotacao)
-    cleanVelo                                0x00000a01   Thumb Code    42  motor.o(.text.cleanVelo)
-    cleanVoltas                              0x00000a2d   Thumb Code    42  motor.o(.text.cleanVoltas)
-    main                                     0x00000a59   Thumb Code    34  motor.o(.text.main)
-    mainMenu                                 0x00000a7d   Thumb Code   890  motor.o(.text.mainMenu)
-    pressbutton                              0x00000df9   Thumb Code    70  motor.o(.text.pressbutton)
-    str2LCD                                  0x00000e41   Thumb Code    72  motor.o(.text.str2LCD)
-    _fp_init                                 0x00000e89   Thumb Code    26  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x00000ea1   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x00000ea1   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    Region$$Table$$Base                      0x00000f08   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00000f18   Number         0  anon$$obj.o(Region$$Table)
+    limpaLCD                                 0x000006ff   Thumb Code     0  gpiofunctions.o(.text)
+    resetCursorPosition                      0x00000715   Thumb Code     0  gpiofunctions.o(.text)
+    controleLCD                              0x00000731   Thumb Code     0  gpiofunctions.o(.text)
+    moveCursor                               0x00000761   Thumb Code     0  gpiofunctions.o(.text)
+    nxline                                   0x00000779   Thumb Code     0  gpiofunctions.o(.text)
+    modoLCD                                  0x00000789   Thumb Code     0  gpiofunctions.o(.text)
+    positionCursor                           0x000007a5   Thumb Code     0  gpiofunctions.o(.text)
+    escreverDadoLCD                          0x000007bf   Thumb Code     0  gpiofunctions.o(.text)
+    inputNumb                                0x000007d9   Thumb Code     0  gpiofunctions.o(.text)
+    motorPasso                               0x0000087f   Thumb Code     0  gpiofunctions.o(.text)
+    GPIO_InitLED                             0x00000979   Thumb Code     0  gpioled.o(.text)
+    LEDsequence                              0x000009f7   Thumb Code     0  gpioled.o(.text)
+    displayLeft                              0x00000a15   Thumb Code     0  gpioled.o(.text)
+    displayRight                             0x00000a35   Thumb Code     0  gpioled.o(.text)
+    actLed                                   0x00000a55   Thumb Code     0  gpioled.o(.text)
+    strlen                                   0x00000ad5   Thumb Code    62  strlen.o(.text)
+    __use_two_region_memory                  0x00000b13   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_escrow$2region                 0x00000b15   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_expand$2region                 0x00000b17   Thumb Code     2  heapauxi.o(.text)
+    __user_setup_stackheap                   0x00000b19   Thumb Code    74  sys_stackheap_outer.o(.text)
+    exit                                     0x00000b63   Thumb Code    18  exit.o(.text)
+    __user_libspace                          0x00000b75   Thumb Code     8  libspace.o(.text)
+    __user_perproc_libspace                  0x00000b75   Thumb Code     0  libspace.o(.text)
+    __user_perthread_libspace                0x00000b75   Thumb Code     0  libspace.o(.text)
+    _sys_exit                                0x00000b7d   Thumb Code     8  sys_exit.o(.text)
+    __I$use$semihosting                      0x00000b89   Thumb Code     0  use_no_semi.o(.text)
+    __use_no_semihosting_swi                 0x00000b89   Thumb Code     2  use_no_semi.o(.text)
+    __semihosting_library_function           0x00000b8b   Thumb Code     0  indicate_semi.o(.text)
+    cleanRotacao                             0x00000b8d   Thumb Code    32  motor.o(.text.cleanRotacao)
+    cleanVelo                                0x00000bad   Thumb Code    32  motor.o(.text.cleanVelo)
+    cleanVoltas                              0x00000bcd   Thumb Code    42  motor.o(.text.cleanVoltas)
+    main                                     0x00000bf9   Thumb Code    38  motor.o(.text.main)
+    mainMenu                                 0x00000c21   Thumb Code  1030  motor.o(.text.mainMenu)
+    pressbutton                              0x00001029   Thumb Code    70  motor.o(.text.pressbutton)
+    str2LCD                                  0x00001071   Thumb Code    72  motor.o(.text.str2LCD)
+    _fp_init                                 0x000010b9   Thumb Code    26  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x000010d1   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x000010d1   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    Region$$Table$$Base                      0x00001170   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00001180   Number         0  anon$$obj.o(Region$$Table)
     __libspace_start                         0x20000000   Data          96  libspace.o(.bss)
     __temporary_stack_top$libspace           0x20000060   Data           0  libspace.o(.bss)
     inputMx                                  0x20000060   Data           4  motor.o(.bss.inputMx)
@@ -592,9 +607,9 @@ Memory Map of the image
 
   Image Entry point : 0x00000209
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000f18, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00001180, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000f18, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00001180, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -648,41 +663,40 @@ Memory Map of the image
     0x000002b4   0x000002b4   0x00000030   Code   RO            4    .text               startup.o
     0x000002e4   0x000002e4   0x000001cc   Code   RO           12    .text               utils.o
     0x000004b0   0x000004b0   0x000001f4   Code   RO           43    .text               gpio.o
-    0x000006a4   0x000006a4   0x00000278   Code   RO           46    .text               gpiofunctions.o
-    0x0000091c   0x0000091c   0x0000003e   Code   RO           54    .text               c_w.l(strlen.o)
-    0x0000095a   0x0000095a   0x00000006   Code   RO           56    .text               c_w.l(heapauxi.o)
-    0x00000960   0x00000960   0x0000004a   Code   RO           76    .text               c_w.l(sys_stackheap_outer.o)
-    0x000009aa   0x000009aa   0x00000012   Code   RO           78    .text               c_w.l(exit.o)
-    0x000009bc   0x000009bc   0x00000008   Code   RO           86    .text               c_w.l(libspace.o)
-    0x000009c4   0x000009c4   0x0000000c   Code   RO          149    .text               c_w.l(sys_exit.o)
-    0x000009d0   0x000009d0   0x00000002   Code   RO          164    .text               c_w.l(use_no_semi.o)
-    0x000009d2   0x000009d2   0x00000000   Code   RO          166    .text               c_w.l(indicate_semi.o)
-    0x000009d2   0x000009d2   0x00000002   PAD
-    0x000009d4   0x000009d4   0x0000002a   Code   RO           20    .text.cleanRotacao  motor.o
-    0x000009fe   0x000009fe   0x00000002   PAD
-    0x00000a00   0x00000a00   0x0000002a   Code   RO           22    .text.cleanVelo     motor.o
-    0x00000a2a   0x00000a2a   0x00000002   PAD
-    0x00000a2c   0x00000a2c   0x0000002a   Code   RO           18    .text.cleanVoltas   motor.o
-    0x00000a56   0x00000a56   0x00000002   PAD
-    0x00000a58   0x00000a58   0x00000022   Code   RO           26    .text.main          motor.o
-    0x00000a7a   0x00000a7a   0x00000002   PAD
-    0x00000a7c   0x00000a7c   0x0000037a   Code   RO           28    .text.mainMenu      motor.o
-    0x00000df6   0x00000df6   0x00000002   PAD
-    0x00000df8   0x00000df8   0x00000046   Code   RO           24    .text.pressbutton   motor.o
-    0x00000e3e   0x00000e3e   0x00000002   PAD
-    0x00000e40   0x00000e40   0x00000048   Code   RO           16    .text.str2LCD       motor.o
-    0x00000e88   0x00000e88   0x0000001a   Code   RO          147    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x00000ea2   0x00000ea2   0x00000065   Data   RO           32    .rodata.str1.1      motor.o
-    0x00000f07   0x00000f07   0x00000001   PAD
-    0x00000f08   0x00000f08   0x00000010   Data   RO          222    Region$$Table       anon$$obj.o
+    0x000006a4   0x000006a4   0x000002d4   Code   RO           46    .text               gpiofunctions.o
+    0x00000978   0x00000978   0x0000015c   Code   RO           49    .text               gpioled.o
+    0x00000ad4   0x00000ad4   0x0000003e   Code   RO           54    .text               c_w.l(strlen.o)
+    0x00000b12   0x00000b12   0x00000006   Code   RO           56    .text               c_w.l(heapauxi.o)
+    0x00000b18   0x00000b18   0x0000004a   Code   RO           76    .text               c_w.l(sys_stackheap_outer.o)
+    0x00000b62   0x00000b62   0x00000012   Code   RO           78    .text               c_w.l(exit.o)
+    0x00000b74   0x00000b74   0x00000008   Code   RO           86    .text               c_w.l(libspace.o)
+    0x00000b7c   0x00000b7c   0x0000000c   Code   RO          149    .text               c_w.l(sys_exit.o)
+    0x00000b88   0x00000b88   0x00000002   Code   RO          164    .text               c_w.l(use_no_semi.o)
+    0x00000b8a   0x00000b8a   0x00000000   Code   RO          166    .text               c_w.l(indicate_semi.o)
+    0x00000b8a   0x00000b8a   0x00000002   PAD
+    0x00000b8c   0x00000b8c   0x00000020   Code   RO           20    .text.cleanRotacao  motor.o
+    0x00000bac   0x00000bac   0x00000020   Code   RO           22    .text.cleanVelo     motor.o
+    0x00000bcc   0x00000bcc   0x0000002a   Code   RO           18    .text.cleanVoltas   motor.o
+    0x00000bf6   0x00000bf6   0x00000002   PAD
+    0x00000bf8   0x00000bf8   0x00000026   Code   RO           26    .text.main          motor.o
+    0x00000c1e   0x00000c1e   0x00000002   PAD
+    0x00000c20   0x00000c20   0x00000406   Code   RO           28    .text.mainMenu      motor.o
+    0x00001026   0x00001026   0x00000002   PAD
+    0x00001028   0x00001028   0x00000046   Code   RO           24    .text.pressbutton   motor.o
+    0x0000106e   0x0000106e   0x00000002   PAD
+    0x00001070   0x00001070   0x00000048   Code   RO           16    .text.str2LCD       motor.o
+    0x000010b8   0x000010b8   0x0000001a   Code   RO          147    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x000010d2   0x000010d2   0x0000009d   Data   RO           32    .rodata.str1.1      motor.o
+    0x0000116f   0x0000116f   0x00000001   PAD
+    0x00001170   0x00001170   0x00000010   Data   RO          222    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000f18, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00001180, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
 
-    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x00000f18, Size: 0x00000478, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000000, Load base: 0x00001180, Size: 0x00000478, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -692,7 +706,7 @@ Memory Map of the image
     0x20000068        -       0x00000004   Zero   RW           33    .bss.rotacao        motor.o
     0x2000006c        -       0x00000004   Zero   RW           34    .bss.velocidade     motor.o
     0x20000070        -       0x00000004   Zero   RW           30    .bss.voltas         motor.o
-    0x20000074   0x00000f18   0x00000004   PAD
+    0x20000074   0x00001180   0x00000004   PAD
     0x20000078        -       0x00000000   Zero   RW            2    HEAP                startup.o
     0x20000078        -       0x00000400   Zero   RW            1    STACK               startup.o
 
@@ -704,16 +718,17 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       500        148          0          0          0        320   gpio.o
-       632         84          0          0          0        392   gpiofunctions.o
-      1192          0        101          0         20       1950   motor.o
-       608        532          0          0       1024        992   startup.o
-       460         92          0          0          0        340   utils.o
+       500        148          0          0          0        328   gpio.o
+       724        106          0          0          0        424   gpiofunctions.o
+       348         96          0          0          0        304   gpioled.o
+      1316          0        157          0         20       2121   motor.o
+       608        532          0          0       1024       1008   startup.o
+       460         92          0          0          0        348   utils.o
 
     ----------------------------------------------------------------------
-      3404        856        118          0       1048       3994   Object Totals
+      3964        974        174          0       1048       4533   Object Totals
          0          0         16          0          0          0   (incl. Generated)
-        12          0          1          0          4          0   (incl. Padding)
+         8          0          1          0          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -762,15 +777,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3746        872        118          0       1144       4494   Grand Totals
-      3746        872        118          0       1144       4494   ELF Image Totals
-      3746        872        118          0          0          0   ROM Totals
+      4306        990        174          0       1144       5033   Grand Totals
+      4306        990        174          0       1144       5033   ELF Image Totals
+      4306        990        174          0          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 3864 (   3.77kB)
+    Total RO  Size (Code + RO Data)                 4480 (   4.38kB)
     Total RW  Size (RW Data + ZI Data)              1144 (   1.12kB)
-    Total ROM Size (Code + RO Data + RW Data)       3864 (   3.77kB)
+    Total ROM Size (Code + RO Data + RW Data)       4480 (   4.38kB)
 
 ==============================================================================
 

@@ -187,10 +187,10 @@ actLed
 	LDR R2, [R1]
 	MOV R0, #2_00100000                                          
 	STR R0, [R1]
-	PUSH	{LR}
+	PUSH	{R1, LR}
 	MOV 	R0, #5
 	BL		SysTick_Wait1ms					;Espera 5ms
-	POP		{LR}
+	POP		{R1, LR}
 	MOV	R0, #2_00000000
 	STR R0, [R1]
 	

@@ -30,6 +30,8 @@ GPIO_PORTH_AHB_DATA_R    	EQU    	0x4005F3FC
 		EXPORT	nxline
 		EXPORT	motorPasso
 		
+		IMPORT	LEDsequence
+		IMPORT	actLed
 		IMPORT	GPIOPortJ_Handler
 		IMPORT 	SysTick_Wait1ms
 ;Enables e disable para LCD
@@ -71,10 +73,10 @@ disableLCD
 	BIC R2, #2_00000111                     
 	ORR R0, R0, R2                          
 	STR R0, [R1]                            
-	PUSH	{LR}
-	MOV 	R0, #0005
-	BL		SysTick_Wait1ms					;Espera 5ms
-	POP		{LR}
+;	PUSH	{LR}
+;	MOV 	R0, #0002
+;	BL		SysTick_Wait1ms					;Espera 5ms
+;	POP		{LR}
 	BX 		LR
 
 ;Organização das operações de acordo com a tabela fornecida
@@ -103,7 +105,7 @@ resetCursorPosition					;Retorn. Cursor
 
 controleLCD							
 	LDR	R1, =GPIO_PORTK_AHB_DATA_R	
-	MOV R0, #2_00001111				;00001ABC		A==Ativa display(1 exibe, 0 apaga), B==liga/deslig cursor (1liga, 0deslig)
+	MOV R0, #2_00001110				;00001ABC		A==Ativa display(1 exibe, 0 apaga), B==liga/deslig cursor (1liga, 0deslig)
 	STR R0, [R1]					;				C==habilita cursor piscante
 	PUSH	{LR}
 	BL		enableLCD
@@ -224,7 +226,7 @@ checkMxKey
 
 	LDR	R1, =GPIO_PORTM_AHB_DATA_R
 	LDR	R2, [R1]
-
+	
 	PUSH	{R2, LR}
 	MOV 	R0, #25
 	BL		SysTick_Wait1ms					;Espera 5ms
@@ -233,45 +235,79 @@ checkMxKey
 	MOV		R0, R2
 	BX	LR
 
+configHalfStep
+	MOV R11, #4096
+	MOV R7 , #1024
+	SUB	R1, R0, #16
+	CMP R1, #8
+	IT	EQ
+	LDREQ	R8, =passoanti
+	BX LR
+	
+configFullStep
+	MOV R11, #2048
+	MOV R7 , #512
+	CMP	R0, #8
+	IT	EQ
+	LDREQ	R8, =passoanti
+	BX LR
+
 motorPasso
 	MOV	R4, #0
+	LDR	R8, =passoHora
+	PUSH{LR}
 	CMP R0, #16
-	ITE	HS
-	MOVHS R11, #4096
-	MOVLO R11, #2048
+	IT		HS
+	BLHS	configHalfStep
+	CMP R0, #16
+	IT		LO
+	BLLO	configFullStep
+	POP{LR}
+	
 	LDR R12, =passoComp0
 	ADD R12, R0
-	MOV	R5, R12
-	LDR	R6, =GPIO_PORTH_AHB_DATA_R
+	MOV	R2 , R12
+	LDR	R3, =GPIO_PORTH_AHB_DATA_R
 
 passoLoop
 	PUSH{LR}
+	PUSH{R1}
 	BL	mudaStateMotor
-	MOV 	R0, #10
-	BL		SysTick_Wait1ms					;Espera 10ms
+	PUSH{R2, R3, R4}
+	UDIV	R2, R4, R7
+	MOV		R10, R8
+	ADD		R10, R2
+	LDRB	R0, [R10]
+	BL		LEDsequence
+	BL		actLed
 	BL 		GPIOPortJ_Handler
+	MOV		R0, #0xCA
+	BL		positionCursor
+	POP{R2, R3, R4}
+	POP{R1}
 	POP{LR}
+	
 	
 	MOV	R0, #8
 	ADD	R4, #1
 	UDIV	R9, R4, R0
+	PUSH{R1}
 	MLS		R1, R9, R0, R4
-	
 	CMP R1, #0
-	MOVEQ R5, R12
-	
+	MOVEQ R2, R12
+	POP{R1}
 	CMP 	R4, R11	
-	IT		LE
-	BLE		passoLoop
+	IT		LO
+	BLO		passoLoop
 
 	BX	LR
 
 mudaStateMotor
-	LDRB	R7, [R5], #1
-	LDR		R8, [R6]
-	BIC	R8, #2_00001111
-	ORR	R7, R7, R8
-	STR	R7, [R6]
+	LDRB	R0, [R2], #1
+	LDR		R1, [R3]
+	BIC	R1, #2_00001111
+	ORR	R0, R0, R1
+	STR	R0, [R3]
 	BX	LR
 
 	BX	LR									;Retorno
@@ -281,6 +317,9 @@ mxToChar		DCB		0xEB, 0x77, 0x7B, 0x7D, 0xB7, 0xBB,0xBD, 0xD7, 0xDB, 0xDD,0x7E, 0
 passoComp0		DCB		2_00001000, 2_00000100, 2_00000010, 2_00000001, 2_00001000, 2_00000100, 2_00000010, 2_00000001
 passoComp1		DCB		2_00000001, 2_00000010, 2_00000100, 2_00001000, 2_00000001, 2_00000010, 2_00000100, 2_00001000
 meioPasso0		DCB		2_00001000, 2_00001100, 2_00000100, 2_00000110, 2_00000010, 2_00000011, 2_00000001, 2_00001001
-meioPasso1		DCB		2_00001001, 2_00000001, 2_00000011, 2_00000010, 2_00000110, 2_00000100, 2_00001100, 2_00001000
+meioPasso1		DCB		2_00000001, 2_00000011, 2_00000010, 2_00000110, 2_00000100, 2_00001100, 2_00001000, 2_00001001
+passoHora		DCB		2_00000011, 2_00001100, 2_00110000, 2_11000000
+passoanti		DCB		2_11000000, 2_00110000, 2_00001100, 2_00000011
+
     ALIGN                           ; garante que o fim da seção está alinhada 
     END                             ; fim do arquivo

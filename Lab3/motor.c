@@ -12,7 +12,7 @@ void PLL_Init(void);
 void SysTick_Init(void);
 void SysTick_Wait1ms(uint32_t delay);
 void GPIO_Init(void);
-
+void GPIO_InitLED(void);
 
 uint32_t inputNumb(void);
 void displayPortA(uint32_t state);
@@ -69,16 +69,14 @@ void cleanVoltas(void)
 void cleanRotacao(void)
 {
 		limpaLCD();
-		rotacao = 0;
-		potencia10 = 0;
+		rotacao = 1;
 		str2LCD("Clk or AntiClk? (0/1): ");
 }
 
 void cleanVelo(void)
 {
 		limpaLCD();
-		velocidade = 0;
-		potencia10 = 0;
+		velocidade = 1;
 		str2LCD("Full or Half ST?(0/1): ");
 }
 
@@ -103,6 +101,7 @@ int main(void)
 	PLL_Init();
 	SysTick_Init();
 	GPIO_Init();
+	GPIO_InitLED();
 	controleLCD();
 	modoLCD();
 	resetCursorPosition();
@@ -141,57 +140,66 @@ void mainMenu(void)
 	
 	inputMx = 0;
 	cleanRotacao();
-	while(inputMx != 58)		//press "A" to confirm
+	do
 	{
 		inputMx = inputNumb();
-		if(inputMx < 2 & potencia10 == 0){
+		if((inputMx < 2) & (rotacao != 0) & (rotacao != 8)){
 			switch (inputMx){
 				case 1:
 					rotacao = 8;
-					potencia10 += 1;	
 					break;
 				case 0:
 					rotacao = 0;
-					potencia10 += 1;
 			}
 			inputMx += 0x30;
 			escreverDadoLCD(inputMx);
-		}else if(rotacao != 8 & rotacao != 0){
+		}else if((inputMx > 1 & inputMx != 10)){
 			cleanRotacao();
 		}
 		inputMx += 0x30;
-	}
+	}	while((inputMx != 58) | (rotacao != 0 & rotacao != 8));		//press "A" to confirm
 	
 	
 	inputMx = 0;
 	cleanVelo();
-	while(inputMx != 58)		//press "A" to confirm
+	do
 	{
 		inputMx = inputNumb();
-		if(inputMx < 2 & potencia10 == 0){
+		if((inputMx < 2) & (velocidade != 16) & (velocidade != 0)){
 			switch (inputMx){
 				case 1:
 					velocidade = 16;
-					potencia10 += 1;	
 					break;
 				case 0:
 					velocidade = 0;
-					potencia10 += 1;
 			}
 			inputMx += 0x30;
 			escreverDadoLCD(inputMx);
-		}else if(velocidade != 16 & velocidade != 0){
+		}else if((inputMx > 1 & inputMx != 10)){
 			cleanVelo();
 		}
 		inputMx += 0x30;
-	}
+	}while((inputMx != 58) | (velocidade != 16 & velocidade != 0));	//press "A" to confirm
 	
 	int	whichMode;
 	whichMode = rotacao + velocidade;
-		
+	
+	limpaLCD();
+	if(rotacao != 8){
+		str2LCD("Clockwise ");
+	}else{
+		str2LCD("Counterclockwise ");
+	}
+	nxline();
+	if(velocidade != 16){
+		str2LCD("Full-step ");
+	}else{
+		str2LCD("Half-step ");
+	}
+	
 	while(voltas > 0)
 	{
-		limpaLCD();
+		
 		if(voltas != 10){
 			escreverDadoLCD(0 + 0x30);
 			escreverDadoLCD(voltas + 0x30);
@@ -199,6 +207,7 @@ void mainMenu(void)
 			escreverDadoLCD(1 + 0x30);
 			escreverDadoLCD(0 + 0x30);
 		}
+		str2LCD(" lft");
 		motorPasso(whichMode);
 		voltas -= 1;
 	}
