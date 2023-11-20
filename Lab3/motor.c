@@ -143,7 +143,7 @@ void mainMenu(void)
 	do
 	{
 		inputMx = inputNumb();
-		if((inputMx < 2) & (rotacao != 0) & (rotacao != 8)){
+		if((inputMx < 2) & (rotacao != 0) & (rotacao != 8)){ //Seleciona o tipo de rotacao no matricial
 			switch (inputMx){
 				case 1:
 					rotacao = 8;
@@ -165,7 +165,7 @@ void mainMenu(void)
 	do
 	{
 		inputMx = inputNumb();
-		if((inputMx < 2) & (velocidade != 16) & (velocidade != 0)){
+		if((inputMx < 2) & (velocidade != 16) & (velocidade != 0)){ //Seleciona a velocidade (passo completo/meio passo) no matricial
 			switch (inputMx){
 				case 1:
 					velocidade = 16;
@@ -197,7 +197,7 @@ void mainMenu(void)
 		str2LCD("Half-step ");
 	}
 	
-	while(voltas > 0)
+	while(voltas > 0) //giro do motor decrementando as voltas
 	{
 		
 		if(voltas != 10){
@@ -212,7 +212,6 @@ void mainMenu(void)
 		voltas -= 1;
 	}
 	pressbutton();
-
 }
 
 
