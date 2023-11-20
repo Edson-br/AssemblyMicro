@@ -136,8 +136,6 @@ NVIC_PRI12_R 				EQU		0xE000E430
 		; Se alguma função do arquivo for chamada em outro arquivo	
         EXPORT 	GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
 		EXPORT	GPIOPortJ_Handler
-		EXPORT	goToMenu
-			
 		IMPORT	mainMenu
 
 ;--------------------------------------------------------------------------------
@@ -299,9 +297,6 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
 			STR		R1, [R0]
 ;retorno            
 			BX      LR
-
-goToMenu
-	B	mainMenu
 
 GPIOPortJ_Handler
 	LDR R1, =GPIO_PORTJ_AHB_RIS_R

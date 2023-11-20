@@ -27,7 +27,6 @@ void escreverDadoLCD(uint32_t data);
 void motorPasso(uint32_t velo);
 
 void GPIOPortJ_Handler(void);
-void goToMenu(void);
 
 //variaveis locais
 int voltas;
@@ -80,35 +79,6 @@ void cleanVelo(void)
 		str2LCD("Full or Half ST?(0/1): ");
 }
 
-void pressbutton()
-{
-	limpaLCD();
-	inputMx = 0;
-	
-	str2LCD("PRESS (*) TO    START");
-	while (1)
-	{
-		inputMx = inputNumb();
-		if(inputMx == 14){
-		goToMenu();
-		}
-		SysTick_Wait1ms(50);		
-	}
-}
-
-int main(void)
-{
-	PLL_Init();
-	SysTick_Init();
-	GPIO_Init();
-	GPIO_InitLED();
-	controleLCD();
-	modoLCD();
-	resetCursorPosition();
-	
-	pressbutton();
-
-}
 
 void mainMenu(void)
 {
@@ -197,7 +167,7 @@ void mainMenu(void)
 		str2LCD("Half-step ");
 	}
 	
-	while(voltas > 0) //giro do motor decrementando as voltas
+	while(voltas > 0) //Giro do motor decrementando as voltas
 	{
 		
 		if(voltas != 10){
@@ -211,7 +181,31 @@ void mainMenu(void)
 		motorPasso(whichMode);
 		voltas -= 1;
 	}
-	pressbutton();
+	
+	limpaLCD();			//Aguarda para comecar novo menu
+	inputMx = 0;
+	
+	str2LCD("PRESS (*) TO    START");
+	while (1)
+	{
+		inputMx = inputNumb();
+		if(inputMx == 14){
+		mainMenu();
+		}
+		SysTick_Wait1ms(50);		
+	}
 }
 
+int main(void)
+{
+	PLL_Init();
+	SysTick_Init();
+	GPIO_Init();
+	GPIO_InitLED();
+	controleLCD();
+	modoLCD();
+	resetCursorPosition();
+	
+	mainMenu();
+}
 
