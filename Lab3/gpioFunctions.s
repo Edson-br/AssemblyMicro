@@ -11,6 +11,8 @@ GPIO_PORTB_AHB_DATA_R    	EQU    	0x400593FC
 GPIO_PORTP_AHB_DATA_R    	EQU    	0x400653FC
 GPIO_PORTH_AHB_DATA_R    	EQU    	0x4005F3FC
 
+
+GPIO_PORTJ_AHB_ICR_R 		EQU		0x4006041C
 ; -------------------------------------------------------------------------------
 ; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
 ;                  código
@@ -253,6 +255,12 @@ configFullStep
 	BX LR
 
 motorPasso
+	PUSH{R1, R2} 							;para invalidar
+	MOV	R1, #2_00000011						;interrupções ativadas
+	LDR R2, =GPIO_PORTJ_AHB_ICR_R			;antes de entrar neste modo
+	STR R1, [R2]							
+	POP{R1, R2}
+	
 	MOV	R4, #0
 	LDR	R8, =passoHora
 	PUSH{LR}
