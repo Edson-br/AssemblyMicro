@@ -79,12 +79,27 @@ void cleanVelo(void)
 		str2LCD("Full or Half ST?(0/1): ");
 }
 
+void pressbt(void)
+{
+	limpaLCD();			//Aguarda para comecar novo menu
+	inputMx = 0;
+	int state1 = 1;
+	str2LCD("PRESS (*) TO    START");
+	while (state1 == 1)
+	{
+		inputMx = inputNumb();
+		if(inputMx == 14){
+			state1 = 0;
+		}
+		SysTick_Wait1ms(50);		
+	}
+}
 
 void mainMenu(void)
 {
 	inputMx = 0;
 	cleanVoltas();
-	while(inputMx != 58 | voltas > 10)		//press "A" to confirm
+	while(inputMx != 58 | voltas > 10 | voltas == 0)		//press "A" to confirm
 	{
 		inputMx = inputNumb();
 		if(inputMx < 10 & potencia10 < 2){
@@ -99,11 +114,11 @@ void mainMenu(void)
 			}
 			inputMx += 0x30;
 			escreverDadoLCD(inputMx);
-		}else if(inputMx > 10){
+		}else if((inputMx > 10)){
 			cleanVoltas();
 		}
 		inputMx += 0x30;
-		if(voltas > 10){
+		if((voltas > 10)| (potencia10 == 3 & voltas == 0)){
 			cleanVoltas();
 		}
 	}
@@ -182,18 +197,8 @@ void mainMenu(void)
 		voltas -= 1;
 	}
 	
-	limpaLCD();			//Aguarda para comecar novo menu
-	inputMx = 0;
-	
-	str2LCD("PRESS (*) TO    START");
-	while (1)
-	{
-		inputMx = inputNumb();
-		if(inputMx == 14){
-		mainMenu();
-		}
-		SysTick_Wait1ms(50);		
-	}
+	pressbt();
+	mainMenu();
 }
 
 int main(void)
@@ -205,7 +210,8 @@ int main(void)
 	controleLCD();
 	modoLCD();
 	resetCursorPosition();
-	
+
+	pressbt();
 	mainMenu();
 }
 

@@ -137,6 +137,7 @@ NVIC_PRI12_R 				EQU		0xE000E430
         EXPORT 	GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
 		EXPORT	GPIOPortJ_Handler
 		IMPORT	mainMenu
+		IMPORT	EnableInterrupts
 
 ;--------------------------------------------------------------------------------
 ; Função GPIO_Init
@@ -264,55 +265,52 @@ EsperaGPIO  LDR     R1, [R0]						;Lê da memória o conteúdo do endereço do regis
                                                         ;nos bits 0 e 1
 			STR     R1, [R0]	
 
-; 8. Habilitando interrupção na portaJ
-			LDR		R0, =GPIO_PORTJ_AHB_IM_R
-			MOV		R1, #2_00000000
-			STR		R1, [R0]
-			
-			LDR		R0, =GPIO_PORTJ_AHB_IS_R 
-			STR		R1, [R0]
-			
-			LDR		R0, =GPIO_PORTJ_AHB_IBE_R
-			STR		R1, [R0]
-			
-			LDR		R0, =GPIO_PORTJ_AHB_IEV_R
-			MOV		R1, #2_00000011
-			STR		R1, [R0]
-			
-			LDR		R0, =GPIO_PORTJ_AHB_ICR_R
-			MOV		R1, #2_00000011
-			STR		R1, [R0]
-			
-			LDR		R0, =GPIO_PORTJ_AHB_IM_R
-			MOV		R1, #2_00000011
-			
-			LDR		R0, =NVIC_EN1_R
-			MOV		R1, #1
-			LSL		R1, #19
-			STR		R1, [R0]
-			
-			LDR		R0, =NVIC_PRI12_R
-			MOV		R1, #5
-			LSL		R1, #29
-			STR		R1, [R0]
-;retorno            
+;Interrupções
+; 8. Desabilitar a interrupção no registrador IM
+			LDR     R0, =GPIO_PORTJ_AHB_IM_R			;Carrega o endereço do IM para a porta J
+			MOV     R1, #2_00							;Desabilitar as interrupções  
+            STR     R1, [R0]							;Escreve no registrador
+            
+; 9. Configurar o tipo de interrupção por borda no registrador IS
+			LDR     R0, =GPIO_PORTJ_AHB_IS_R			;Carrega o endereço do IS para a porta J
+			MOV     R1, #2_00							;Por Borda  
+            STR     R1, [R0]							;Escreve no registrador
+
+; 10. Configurar  borda única no registrador IBE
+			LDR     R0, =GPIO_PORTJ_AHB_IBE_R			;Carrega o endereço do IBE para a porta J
+			MOV     R1, #2_00							;Borda Única  
+            STR     R1, [R0]							;Escreve no registrador
+; 11. Configurar  borda de descida (botão pressionado) no registrador IEV
+			LDR     R0, =GPIO_PORTJ_AHB_IEV_R			;Carrega o endereço do IEV para a porta J
+			MOV     R1, #2_00							;Borda Única  
+            STR     R1, [R0]							;Escreve no registrador
+; 12. Habilitar a interrupção no registrador IM
+			LDR     R0, =GPIO_PORTJ_AHB_IM_R			;Carrega o endereço do IM para a porta J
+			MOV     R1, #2_01							;Habilitar as interrupções  
+            STR     R1, [R0]							;Escreve no registrador
+            
+;Interrupção número 51            
+; 13. Setar a prioridade no NVIC
+			LDR     R0, =NVIC_PRI12_R           		;Carrega o do NVIC para o grupo que tem o J entre 51 e 48
+			MOV     R1, #0xA0000000                     ;Prioridade 5							  
+            STR     R1, [R0]							;Escreve no registrador da memória
+; 14. Habilitar a interrupção no NVIC
+			LDR     R0, =NVIC_EN1_R           			;Carrega o do NVIC para o grupo que tem o J entre 63 e 32
+			MOV     R1, #0x80000                         
+            STR     R1, [R0]							;Escreve no registrador da memória
+; 15. Habilitar a chave geral das interrupções
+			PUSH {LR}
+			BL  EnableInterrupts
+			POP {LR}
 			BX      LR
 
 GPIOPortJ_Handler
-	LDR R1, =GPIO_PORTJ_AHB_RIS_R
-	LDR R0, [R1]
-	
-	CMP R0, #1
-	BEQ	trueHandler
-	
-	BX LR
-
-trueHandler
-	MOV	R1, #2_00000011
-	LDR R2, =GPIO_PORTJ_AHB_ICR_R
-	STR R1, [R2]
-	BEQ	mainMenu
+    LDR R1, =GPIO_PORTJ_AHB_ICR_R
+    MOV R0, #2_01        ; Fazendo o ACK do bit 0 do PortJ
+    STR R0, [R1]      ;limpando a interrupção (ack)
+	MOV R5, #696
 	BX	LR
+	
 
     ALIGN                           ; garante que o fim da seção está alinhada 
     END                             ; fim do arquivo

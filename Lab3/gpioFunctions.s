@@ -36,6 +36,8 @@ GPIO_PORTJ_AHB_ICR_R 		EQU		0x4006041C
 		IMPORT	actLed
 		IMPORT	GPIOPortJ_Handler
 		IMPORT 	SysTick_Wait1ms
+		IMPORT	mainMenu
+		IMPORT	EnableInterrupts
 ;Enables e disable para LCD
 ;a princípio basta executar enableLCD q o código do disableLCD é executado após 5ms
 ;e dps de mais 5ms ele volta para o main
@@ -255,12 +257,6 @@ configFullStep
 	BX LR
 
 motorPasso
-	PUSH{R1, R2} 							;para invalidar
-	MOV	R1, #2_00000011						;interrupções ativadas
-	LDR R2, =GPIO_PORTJ_AHB_ICR_R			;antes de entrar neste modo
-	STR R1, [R2]							
-	POP{R1, R2}
-	
 	MOV	R4, #0
 	LDR	R8, =passoHora
 	PUSH{LR}
@@ -277,6 +273,9 @@ motorPasso
 	MOV	R2 , R12
 	LDR	R3, =GPIO_PORTH_AHB_DATA_R
 
+	
+	MOV	R5, #0
+
 passoLoop
 	PUSH{LR}
 	PUSH{R1}
@@ -288,7 +287,8 @@ passoLoop
 	LDRB	R0, [R10]
 	BL		LEDsequence
 	BL		actLed
-	BL 		GPIOPortJ_Handler
+	CMP R5, #696
+	BEQ mainMenu
 	MOV		R0, #0xCA
 	BL		positionCursor
 	POP{R2, R3, R4}
