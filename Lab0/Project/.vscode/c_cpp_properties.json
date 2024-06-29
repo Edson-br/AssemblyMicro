@@ -1,0 +1,42 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/lilpc/Documents/GitHub/AssemblyMicro/Lab0/Project/include",
+                "/home/lilpc/Documents/GitHub/AssemblyMicro/Lab0/Project/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/lilpc/Documents/GitHub/AssemblyMicro/Lab0/Project/include",
+                    "/home/lilpc/Documents/GitHub/AssemblyMicro/Lab0/Project/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "F_CPU=120000000L",
+                "PLATFORMIO=60115",
+                "ENERGIA_ARCH_TIVAC",
+                "ENERGIA_EK_TM4C1294XL",
+                "__PLATFORMIO_BUILD_DEBUG__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++11",
+            "compilerPath": "/home/lilpc/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mthumb",
+                "-mcpu=cortex-m4",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
